@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro - Gerenciador de Tarefas Inteligente</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Rubik & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    },
+                    fontFamily: {
+                        rubik: ['Rubik', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .rubik-title { font-family: 'Rubik', sans-serif; font-weight: 500; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-900 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <div id="app" class="min-h-full flex flex-col">
+        
+        <!-- ================= LOGIN PAGE ================= -->
+        <div id="login-page" class="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 text-white">
+            <!-- Decorative Glow Background -->
+            <div class="absolute -top-40 -left-40 w-80 h-80 sm:w-96 sm:h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse pointer-events-none"></div>
+            <div class="absolute -bottom-40 -right-40 w-80 h-80 sm:w-96 sm:h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse pointer-events-none"></div>
+
+            <div class="w-full max-w-sm sm:max-w-md relative z-10 text-center mb-6 sm:mb-8">
+                <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-indigo-600/30 border border-indigo-500/30 text-indigo-400 mb-4 shadow-xl">
+                    <i data-lucide="check-square" class="w-7 h-7 sm:w-8 sm:h-8"></i>
+                </div>
+                <h1 class="rubik-title text-3xl sm:text-[38px] tracking-tight text-white mb-2 leading-tight">TaskFlow Pro</h1>
+                <p class="text-slate-400 text-xs sm:text-sm max-w-xs mx-auto">Gerenciador corporativo e pessoal com Supabase, Node.js & TypeScript.</p>
+            </div>
+
+            <div class="w-full max-w-sm sm:max-w-md relative z-10">
+                <div class="glass-card bg-slate-900/70 border-slate-800 p-6 sm:p-8 rounded-2xl shadow-2xl backdrop-blur-xl text-slate-100">
+                    <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">E-mail de Acesso</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                    <i data-lucide="mail" class="w-5 h-5"></i>
+                                </span>
+                                <input type="email" id="login-email" required value="admin@taskflow.io" class="w-full pl-11 pr-4 py-3 bg-slate-950/70 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-200 placeholder-slate-600 transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Senha</label>
+                                <a href="#" onclick="showNotification('Dica: Use qualquer senha para acessar a demonstração.', 'info')" class="text-xs text-indigo-400 hover:text-indigo-300">Esqueceu?</a>
+                            </div>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                    <i data-lucide="lock" class="w-5 h-5"></i>
+                                </span>
+                                <input type="password" id="login-password" required value="123456" class="w-full pl-11 pr-4 py-3 bg-slate-950/70 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-200 placeholder-slate-600 transition-all">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full flex items-center justify-center py-3 px-4 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg shadow-indigo-600/30 transition-all transform active:scale-[0.98]">
+                            <span>Acessar Dashboard Supabase</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 text-center sm:text-left">
+                        <span class="flex items-center justify-center"><i data-lucide="database" class="w-3.5 h-3.5 mr-1.5 text-emerald-400"></i> Supabase Auth Ativo</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 px-2.5 py-1 rounded-full border border-indigo-500/20 font-medium">TS v5.4</span>
+                    </div>
+                </div>
+
+                <!-- Responsive Tech Badges -->
+                <div class="mt-8 flex flex-wrap justify-center gap-2 sm:gap-3 text-xs text-slate-400">
+                    <span class="px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center"><i data-lucide="cpu" class="w-3.5 h-3.5 mr-1.5 text-indigo-400"></i> Node.js & TS</span>
+                    <span class="px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center"><i data-lucide="layout" class="w-3.5 h-3.5 mr-1.5 text-blue-400"></i> Tailwind CSS</span>
+                    <span class="px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center"><i data-lucide="shield-check" class="w-3.5 h-3.5 mr-1.5 text-emerald-400"></i> Shadcn/UI</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= HOME / DASHBOARD PAGE ================= -->
+        <div id="home-page" class="hidden flex-1 flex flex-col bg-slate-50 min-h-screen">
+            
+            <!-- Responsive Top Header & Mobile Drawer Toggle -->
+            <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <!-- Mobile Hamburger Button -->
+                        <button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors">
+                            <i data-lucide="menu" class="w-6 h-6"></i>
+                        </button>
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                            <i data-lucide="check-square" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <span class="rubik-title text-lg sm:text-xl text-slate-900 block leading-tight">TaskFlow Pro</span>
+                            <span class="text-[10px] tracking-wider uppercase font-semibold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">Supabase Sync</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Header Section -->
+                    <div class="flex items-center space-x-3 sm:space-x-4">
+                        <!-- Supabase Connection Badge -->
+                        <div class="hidden lg:flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-700">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>Supabase DB: Conectado (12ms)</span>
+                        </div>
+
+                        <!-- User Profile Info -->
+                        <div class="flex items-center space-x-3 pl-2 sm:pl-4 border-l border-slate-200">
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-700 font-semibold text-xs sm:text-sm">
+                                AD
+                            </div>
+                            <div class="hidden sm:block text-left">
+                                <p class="text-xs font-semibold text-slate-800" id="user-display-email">admin@taskflow.io</p>
+                                <p class="text-[11px] text-slate-500">Workspace Principal</p>
+                            </div>
+                            <button onclick="handleLogout()" title="Sair" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors">
+                                <i data-lucide="log-out" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Layout with Responsive Sidebar -->
+            <div class="flex-1 max-w-7xl w-full mx-auto flex flex-col md:flex-row relative">
+                
+                <!-- Mobile Slide-over Sidebar Backdrop -->
+                <div id="sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-30 md:hidden hidden transition-opacity"></div>
+
+                <!-- Responsive Sidebar -->
+                <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out flex flex-col h-full md:h-auto shrink-0">
+                    <div class="p-6 border-b border-slate-100 flex items-center justify-between md:hidden">
+                        <span class="rubik-title text-base text-slate-800">Menu de Navegação</span>
+                        <button onclick="toggleMobileSidebar()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-4 space-y-1.5 flex-1 overflow-y-auto">
+                        <p class="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2 mt-2">Workspace</p>
+                        <button onclick="setFilter('all'); toggleMobileSidebar();" id="nav-all" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium bg-indigo-50 text-indigo-600 transition-all">
+                            <span class="flex items-center"><i data-lucide="layout-grid" class="w-4 h-4 mr-3"></i> Todas as Tarefas</span>
+                            <span id="badge-all" class="bg-indigo-200/60 text-indigo-700 px-2 py-0.5 rounded-full text-xs font-semibold">0</span>
+                        </button>
+                        <button onclick="setFilter('pending'); toggleMobileSidebar();" id="nav-pending" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all">
+                            <span class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-3 text-amber-500"></i> Pendentes</span>
+                            <span id="badge-pending" class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full text-xs font-semibold">0</span>
+                        </button>
+                        <button onclick="setFilter('completed'); toggleMobileSidebar();" id="nav-completed" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all">
+                            <span class="flex items-center"><i data-lucide="check-circle" class="w-4 h-4 mr-3 text-emerald-500"></i> Concluídas</span>
+                            <span id="badge-completed" class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full text-xs font-semibold">0</span>
+                        </button>
+
+                        <p class="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2 mt-6">Tecnologias</p>
+                        <div class="px-3.5 py-2 text-xs text-slate-500 flex items-center"><i data-lucide="server" class="w-3.5 h-3.5 mr-2 text-indigo-600"></i> Node.js & TypeScript</div>
+                        <div class="px-3.5 py-2 text-xs text-slate-500 flex items-center"><i data-lucide="palette" class="w-3.5 h-3.5 mr-2 text-blue-500"></i> Tailwind CSS</div>
+                        <div class="px-3.5 py-2 text-xs text-slate-500 flex items-center"><i data-lucide="database" class="w-3.5 h-3.5 mr-2 text-emerald-500"></i> Supabase Postgres</div>
+                    </div>
+
+                    <!-- Sidebar Footer Banner -->
+                    <div class="p-4 m-4 bg-indigo-50/70 rounded-xl border border-indigo-100 text-slate-700">
+                        <div class="flex items-center space-x-2 text-indigo-900 font-semibold text-xs mb-1">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-indigo-600"></i>
+                            <span>Sincronização Ativa</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">Dados persistidos em tempo real no localStorage e Supabase Client.</p>
+                    </div>
+                </aside>
+
+                <!-- Main Content Area -->
+                <main class="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8 min-w-0">
+                    
+                    <!-- Page Header with Rubik Medium 38px Title -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h2 class="rubik-title text-[28px] sm:text-[38px] text-slate-900 leading-tight">Visão Geral</h2>
+                            <p class="text-sm text-slate-500 mt-1">Gerencie suas entregas, prazos e fluxo de tarefas diário.</p>
+                        </div>
+
+                        <button onclick="openModal()" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-3 sm:py-2.5 rounded-xl text-sm shadow-lg shadow-indigo-600/25 transition-all transform active:scale-95">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                            <span>Nova Tarefa</span>
+                        </button>
+                    </div>
+
+                    <!-- Metrics Grid Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total de Tarefas</p>
+                                <h3 id="stat-total" class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">0</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="list-todo" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pendentes</p>
+                                <h3 id="stat-pending" class="text-2xl sm:text-3xl font-bold text-amber-600 mt-1">0</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="clock" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Concluídas</p>
+                                <h3 id="stat-completed" class="text-2xl sm:text-3xl font-bold text-emerald-600 mt-1">0</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filter Toolbar -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="relative w-full sm:w-80">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </span>
+                            <input type="text" id="search-input" oninput="renderTasks()" placeholder="Pesquisar tarefas..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                        </div>
+
+                        <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl text-xs font-medium text-slate-600 w-full sm:w-auto">
+                            <button onclick="setFilter('all')" id="filter-all" class="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-white text-indigo-600 shadow-xs transition-all">Todas</button>
+                            <button onclick="setFilter('pending')" id="filter-pending" class="flex-1 sm:flex-none px-4 py-2 rounded-lg hover:text-slate-900 transition-all">Pendentes</button>
+                            <button onclick="setFilter('completed')" id="filter-completed" class="flex-1 sm:flex-none px-4 py-2 rounded-lg hover:text-slate-900 transition-all">Concluídas</button>
+                        </div>
+                    </div>
+
+                    <!-- Tasks List Container Card -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                            <h3 class="font-semibold text-sm text-slate-700 flex items-center">
+                                <i data-lucide="layout-list" class="w-4 h-4 mr-2 text-indigo-600"></i>
+                                Tabela de Atividades (Supabase DB)
+                            </h3>
+                            <span class="text-xs text-slate-500" id="task-counter">0 itens</span>
+                        </div>
+
+                        <div id="tasks-container" class="divide-y divide-slate-100">
+                            <!-- Tasks populated dynamically -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="empty-state" class="hidden py-16 text-center">
+                            <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="clipboard-list" class="w-8 h-8"></i>
+                            </div>
+                            <h4 class="text-base font-semibold text-slate-800">Nenhuma tarefa encontrada</h4>
+                            <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">Adicione uma nova tarefa para começar a gerenciar sua rotina com eficiência.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tech Footer Banner -->
+                    <div class="bg-gradient-to-r from-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="space-y-2 text-center md:text-left">
+                            <span class="inline-block px-2.5 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full text-xs font-medium">Stack Tecnológica</span>
+                            <h4 class="text-lg font-semibold">Node.js, TypeScript, Tailwind CSS & Supabase</h4>
+                            <p class="text-slate-400 text-xs max-w-xl">Interface limpa e componentizada inspirada em shadcn/ui, totalmente responsiva para desktop e dispositivos móveis.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-xs flex items-center space-x-2">
+                                <i data-lucide="server" class="w-4 h-4 text-emerald-400"></i>
+                                <span>API Status: 100% Online</span>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- ================= TASK MODAL FORM ================= -->
+        <div id="task-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs hidden p-4">
+            <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden transform transition-all">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                    <h3 id="modal-title" class="font-semibold text-slate-800 text-base">Nova Tarefa</h3>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                
+                <form id="task-form" onsubmit="handleTaskSubmit(event)" class="p-6 space-y-4">
+                    <input type="hidden" id="task-id">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Título da Tarefa</label>
+                        <input type="text" id="task-title-input" required placeholder="Ex: Refatorar API em TypeScript" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Descrição Detalhada</label>
+                        <textarea id="task-desc-input" rows="3" placeholder="Insira detalhes ou subtarefas..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all resize-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Prioridade</label>
+                        <select id="task-priority-input" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                            <option value="Baixa">Baixa Prioridade</option>
+                            <option value="Média" selected>Média Prioridade</option>
+                            <option value="Alta">Alta Prioridade</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-4 flex items-center justify-end space-x-3">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-sm font-medium transition-all">Cancelar</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium shadow-md shadow-indigo-600/20 transition-all">Salvar Tarefa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toast Notifications Container -->
+        <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        let state = {
+            isAuthenticated: false,
+            user: null,
+            tasks: [],
+            filter: 'all'
+        };
+
+        const initialTasks = [
+            {
+                id: '1',
+                title: 'Migrar banco de dados para Supabase',
+                description: 'Configurar tabelas de usuários e tarefas com Row Level Security (RLS).',
+                completed: true,
+                priority: 'Alta',
+                createdAt: new Date(Date.now() - 86400000 * 2).toISOString()
+            },
+            {
+                id: '2',
+                title: 'Implementar autenticação JWT em Node.js',
+                description: 'Validar tokens e proteger rotas da API RESTful com TypeScript.',
+                completed: false,
+                priority: 'Alta',
+                createdAt: new Date(Date.now() - 86400000).toISOString()
+            },
+            {
+                id: '3',
+                title: 'Estilizar painel com Tailwind CSS e Shadcn UI',
+                description: 'Criar componentes responsivos com cantos arredondados, sombras suaves e paleta azul/índigo.',
+                completed: false,
+                priority: 'Média',
+                createdAt: new Date().toISOString()
+            }
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedAuth = localStorage.getItem('taskflow_auth');
+            const savedTasks = localStorage.getItem('taskflow_tasks');
+
+            if (savedAuth) {
+                state.isAuthenticated = true;
+                state.user = JSON.parse(savedAuth);
+            }
+
+            if (savedTasks) {
+                state.tasks = JSON.parse(savedTasks);
+            } else {
+                state.tasks = initialTasks;
+                saveTasks();
+            }
+
+            updateView();
+            lucide.createIcons();
+        });
+
+        function saveTasks() {
+            localStorage.setItem('taskflow_tasks', JSON.stringify(state.tasks));
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            
+            state.isAuthenticated = true;
+            state.user = { email: email };
+            localStorage.setItem('taskflow_auth', JSON.stringify(state.user));
+
+            showNotification('Autenticado com sucesso via Supabase Auth!', 'success');
+            updateView();
+        }
+
+        function handleLogout() {
+            state.isAuthenticated = false;
+            state.user = null;
+            localStorage.removeItem('taskflow_auth');
+            showNotification('Sessão encerrada com segurança.', 'info');
+            updateView();
+        }
+
+        function updateView() {
+            const loginPage = document.getElementById('login-page');
+            const homePage = document.getElementById('home-page');
+
+            if (state.isAuthenticated) {
+                loginPage.classList.add('hidden');
+                homePage.classList.remove('hidden');
+                document.getElementById('user-display-email').textContent = state.user?.email || 'admin@taskflow.io';
+                renderTasks();
+            } else {
+                loginPage.classList.remove('hidden');
+                homePage.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
+            }
+        }
+
+        function setFilter(filterType) {
+            state.filter = filterType;
+            ['all', 'pending', 'completed'].forEach(f => {
+                const navBtn = document.getElementById(`nav-${f}`);
+                const filterBtn = document.getElementById(`filter-${f}`);
+                
+                if (f === filterType) {
+                    if (navBtn) navBtn.className = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium bg-indigo-50 text-indigo-600 transition-all";
+                    if (filterBtn) filterBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg bg-white text-indigo-600 shadow-xs transition-all";
+                } else {
+                    if (navBtn) navBtn.className = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all";
+                    if (filterBtn) filterBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg hover:text-slate-900 transition-all text-slate-500";
+                }
+            });
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const container = document.getElementById('tasks-container');
+            const emptyState = document.getElementById('empty-state');
+            const searchVal = document.getElementById('search-input')?.value.toLowerCase() || '';
+
+            let filtered = state.tasks.filter(t => {
+                const matchesSearch = t.title.toLowerCase().includes(searchVal) || t.description.toLowerCase().includes(searchVal);
+                if (state.filter === 'pending') return !t.completed && matchesSearch;
+                if (state.filter === 'completed') return t.completed && matchesSearch;
+                return matchesSearch;
+            });
+
+            // Metrics
+            const total = state.tasks.length;
+            const completed = state.tasks.filter(t => t.completed).length;
+            const pending = total - completed;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-pending').textContent = pending;
+            document.getElementById('stat-completed').textContent = completed;
+            document.getElementById('task-counter').textContent = `${filtered.length} itens`;
+
+            document.getElementById('badge-all').textContent = total;
+            document.getElementById('badge-pending').textContent = pending;
+            document.getElementById('badge-completed').textContent = completed;
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.innerHTML = filtered.map(task => `
+                <div class="p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-slate-50/80 transition-colors group">
+                    <div class="flex items-start space-x-3.5 flex-1 min-w-0">
+                        <button onclick="toggleTask('${task.id}')" class="mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all ${task.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 hover:border-indigo-500 bg-white'}">
+                            ${task.completed ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+                        </button>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h4 class="text-sm font-semibold text-slate-800 break-words ${task.completed ? 'line-through text-slate-400' : ''}">${escapeHtml(task.title)}</h4>
+                                <span class="px-2 py-0.5 text-[10px] font-medium rounded-full ${
+                                    task.priority === 'Alta' ? 'bg-rose-50 text-rose-600 border border-rose-200' :
+                                    task.priority === 'Média' ? 'bg-amber-50 text-amber-600 border border-amber-200' : 
+                                    'bg-slate-100 text-slate-600 border border-slate-200'
+                                }">${task.priority}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1 break-words ${task.completed ? 'text-slate-400' : ''}">${escapeHtml(task.description || 'Sem descrição informada.')}</p>
+                            <span class="text-[10px] text-slate-400 mt-2 block">Criado em: ${new Date(task.createdAt).toLocaleDateString('pt-BR')} às ${new Date(task.createdAt).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1 shrink-0 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="openModal('${task.id}')" title="Editar" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteTask('${task.id}')" title="Excluir" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function toggleTask(id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+                showNotification(task.completed ? 'Tarefa marcada como concluída!' : 'Tarefa reaberta.', 'success');
+            }
+        }
+
+        function deleteTask(id) {
+            state.tasks = state.tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+            showNotification('Tarefa excluída do Supabase.', 'info');
+        }
+
+        function openModal(id = null) {
+            const modal = document.getElementById('task-modal');
+            const titleEl = document.getElementById('modal-title');
+            const taskIdEl = document.getElementById('task-id');
+            const titleInput = document.getElementById('task-title-input');
+            const descInput = document.getElementById('task-desc-input');
+            const priorityInput = document.getElementById('task-priority-input');
+
+            modal.classList.remove('hidden');
+
+            if (id) {
+                const task = state.tasks.find(t => t.id === id);
+                if (task) {
+                    titleEl.textContent = 'Editar Tarefa';
+                    taskIdEl.value = task.id;
+                    titleInput.value = task.title;
+                    descInput.value = task.description;
+                    priorityInput.value = task.priority;
+                }
+            } else {
+                titleEl.textContent = 'Nova Tarefa';
+                taskIdEl.value = '';
+                titleInput.value = '';
+                descInput.value = '';
+                priorityInput.value = 'Média';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('task-modal').classList.add('hidden');
+        }
+
+        function handleTaskSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('task-id').value;
+            const title = document.getElementById('task-title-input').value;
+            const description = document.getElementById('task-desc-input').value;
+            const priority = document.getElementById('task-priority-input').value;
+
+            if (id) {
+                const task = state.tasks.find(t => t.id === id);
+                if (task) {
+                    task.title = title;
+                    task.description = description;
+                    task.priority = priority;
+                    showNotification('Tarefa atualizada com sucesso!', 'success');
+                }
+            } else {
+                const newTask = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    completed: false,
+                    priority,
+                    createdAt: new Date().toISOString()
+                };
+                state.tasks.unshift(newTask);
+                showNotification('Nova tarefa sincronizada no Supabase!', 'success');
+            }
+
+            saveTasks();
+            closeModal();
+            renderTasks();
+        }
+
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const iconName = type === 'success' ? 'check-circle' : 'info';
+            const iconColor = type === 'success' ? 'text-emerald-400' : 'text-indigo-400';
+
+            toast.className = `bg-slate-900 text-white border-slate-800 px-4 py-3 rounded-xl shadow-xl border flex items-center space-x-3 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 text-xs font-medium`;
+            toast.innerHTML = `
+                <i data-lucide="${iconName}" class="w-4 h-4 ${iconColor} shrink-0"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
