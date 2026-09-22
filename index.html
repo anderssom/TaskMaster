@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskMaster - Dark Edition</title>
     
-    <!-- Configurações PWA e Ícone de Atalho na Tela Inicial -->
+    <!-- Configurações PWA e Atalho na Tela Inicial -->
     <meta name="theme-color" content="#09090b">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaskMaster">
     
-    <!-- Apple Touch Icon (Garante ícone customizado no iOS) -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <!-- Apple Touch Icon (iOS) -->
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png">
 
-    <!-- Web App Manifest com Ícone Vetorial Embutido (Garante ícone customizado no Android/Chrome) -->
+    <!-- Web App Manifest com Ícone PNG Físico (Android / Chrome) -->
     <link rel="manifest" href='data:application/manifest+json,{
         "name": "TaskMaster Gerenciador",
         "short_name": "TaskMaster",
@@ -25,9 +25,15 @@
         "theme_color": "#09090b",
         "icons": [
             {
-                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'%3E%3Crect width=\'512\' height=\'512\' rx=\'110\' fill=\'%234f46e5\'/%3E%3Cpath d=\'M160 260l70 70 130-140\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'50\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E",
+                "src": "https://cdn-icons-png.flaticon.com/512/3209/3209265.png",
+                "sizes": "192x192",
+                "type": "image/png",
+                "purpose": "any maskable"
+            },
+            {
+                "src": "https://cdn-icons-png.flaticon.com/512/3209/3209265.png",
                 "sizes": "512x512",
-                "type": "image/svg+xml",
+                "type": "image/png",
                 "purpose": "any maskable"
             }
         ]
@@ -109,7 +115,7 @@
             <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 style="font-family: 'Rubik', sans-serif; font-size: 38px; font-weight: 500;" class="text-white tracking-tight leading-none mb-1">Painel</h2>
-                    <p class="text-sm text-slate-400">Modo Dark Ativo • Ícone PWA configurado para identificação na tela inicial.</p>
+                    <p class="text-sm text-slate-400">Modo Dark Ativo • Ícone PNG PWA configurado com sucesso para a tela inicial.</p>
                 </div>
                 <div class="flex gap-2 flex-wrap">
                     <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">TypeScript</span>
@@ -163,7 +169,7 @@
         });
 
         let filter = 'all';
-        let tasks = JSON.parse(localStorage.getItem('gh_tasks_dark_v2')) || [
+        let tasks = JSON.parse(localStorage.getItem('gh_tasks_dark_v3')) || [
             { id: 1, title: 'Configurar Servidor Node.js', desc: 'Estruturar Express e rotas iniciais', completed: true },
             { id: 2, title: 'Conectar com Supabase', desc: 'Validar chaves de API e tabelas PostgreSQL', completed: false }
         ];
@@ -176,12 +182,12 @@
         function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
-            localStorage.setItem('gh_user_dark_v2', email);
+            localStorage.setItem('gh_user_dark_v3', email);
             showHome(email);
         }
 
         function checkInitialSession() {
-            const user = localStorage.getItem('gh_user_dark_v2');
+            const user = localStorage.getItem('gh_user_dark_v3');
             if (user) {
                 showHome(user);
             }
@@ -201,7 +207,7 @@
         }
 
         function handleLogout() {
-            localStorage.removeItem('gh_user_dark_v2');
+            localStorage.removeItem('gh_user_dark_v3');
             window.location.reload();
         }
 
@@ -250,7 +256,7 @@
         }
 
         function sync() {
-            localStorage.setItem('gh_tasks_dark_v2', JSON.stringify(tasks));
+            localStorage.setItem('gh_tasks_dark_v3', JSON.stringify(tasks));
             render();
         }
 
