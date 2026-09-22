@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskMaster - Dark Edition</title>
     
-    <!-- Configurações para Instalação PWA (Atalho na Tela Inicial com Ícone) -->
+    <!-- Configurações PWA e Ícone de Atalho na Tela Inicial -->
     <meta name="theme-color" content="#09090b">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaskMaster">
     
-    <!-- Manifest embutido para gerar o ícone perfeito ao adicionar à tela inicial -->
+    <!-- Apple Touch Icon (Garante ícone customizado no iOS) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+    <!-- Web App Manifest com Ícone Vetorial Embutido (Garante ícone customizado no Android/Chrome) -->
     <link rel="manifest" href='data:application/manifest+json,{
-        "name": "TaskMaster App",
+        "name": "TaskMaster Gerenciador",
         "short_name": "TaskMaster",
         "start_url": "./",
         "display": "standalone",
@@ -21,14 +25,10 @@
         "theme_color": "#09090b",
         "icons": [
             {
-                "src": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=192&h=192&fit=crop",
-                "sizes": "192x192",
-                "type": "image/png"
-            },
-            {
-                "src": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=512&h=512&fit=crop",
+                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'%3E%3Crect width=\'512\' height=\'512\' rx=\'110\' fill=\'%234f46e5\'/%3E%3Cpath d=\'M160 260l70 70 130-140\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'50\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E",
                 "sizes": "512x512",
-                "type": "image/png"
+                "type": "image/svg+xml",
+                "purpose": "any maskable"
             }
         ]
     }'>
@@ -109,7 +109,7 @@
             <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 style="font-family: 'Rubik', sans-serif; font-size: 38px; font-weight: 500;" class="text-white tracking-tight leading-none mb-1">Painel</h2>
-                    <p class="text-sm text-slate-400">Modo escuro ativado • PWA configurado com ícone de atalho para tela inicial.</p>
+                    <p class="text-sm text-slate-400">Modo Dark Ativo • Ícone PWA configurado para identificação na tela inicial.</p>
                 </div>
                 <div class="flex gap-2 flex-wrap">
                     <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">TypeScript</span>
@@ -153,7 +153,7 @@
         </main>
     </div>
 
-    <!-- Script de Execução Online Dark & PWA -->
+    <!-- Script de Execução Online -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             if (typeof lucide !== 'undefined') {
@@ -163,7 +163,7 @@
         });
 
         let filter = 'all';
-        let tasks = JSON.parse(localStorage.getItem('gh_tasks_dark')) || [
+        let tasks = JSON.parse(localStorage.getItem('gh_tasks_dark_v2')) || [
             { id: 1, title: 'Configurar Servidor Node.js', desc: 'Estruturar Express e rotas iniciais', completed: true },
             { id: 2, title: 'Conectar com Supabase', desc: 'Validar chaves de API e tabelas PostgreSQL', completed: false }
         ];
@@ -176,12 +176,12 @@
         function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
-            localStorage.setItem('gh_user_dark', email);
+            localStorage.setItem('gh_user_dark_v2', email);
             showHome(email);
         }
 
         function checkInitialSession() {
-            const user = localStorage.getItem('gh_user_dark');
+            const user = localStorage.getItem('gh_user_dark_v2');
             if (user) {
                 showHome(user);
             }
@@ -201,7 +201,7 @@
         }
 
         function handleLogout() {
-            localStorage.removeItem('gh_user_dark');
+            localStorage.removeItem('gh_user_dark_v2');
             window.location.reload();
         }
 
@@ -250,7 +250,7 @@
         }
 
         function sync() {
-            localStorage.setItem('gh_tasks_dark', JSON.stringify(tasks));
+            localStorage.setItem('gh_tasks_dark_v2', JSON.stringify(tasks));
             render();
         }
 
