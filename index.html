@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskMaster - Dark Edition</title>
+    <title>DevKanban - Dark Edition</title>
     
     <!-- Configurações PWA e Atalho na Tela Inicial -->
     <meta name="theme-color" content="#09090b">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="TaskMaster">
+    <meta name="apple-mobile-web-app-title" content="DevKanban">
     
     <!-- Apple Touch Icon (iOS) -->
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png">
 
     <!-- Web App Manifest com Ícone PNG Físico (Android / Chrome) -->
     <link rel="manifest" href='data:application/manifest+json,{
-        "name": "TaskMaster Gerenciador",
-        "short_name": "TaskMaster",
+        "name": "DevKanban Gerenciador",
+        "short_name": "DevKanban",
         "start_url": "./",
         "display": "standalone",
         "background_color": "#09090b",
@@ -68,7 +68,7 @@
                 <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-indigo-600 text-white mb-2 shadow-lg shadow-indigo-500/20">
                     <i data-lucide="check-square" class="w-7 h-7"></i>
                 </div>
-                <h1 style="font-family: 'Rubik', sans-serif; font-size: 38px; font-weight: 500;" class="text-white tracking-tight leading-none">TaskMaster</h1>
+                <h1 style="font-family: 'Rubik', sans-serif; font-size: 38px; font-weight: 500;" class="text-white tracking-tight leading-none">DevKanban</h1>
                 <p class="text-sm text-slate-400">Gerenciador de Tarefas • Node.js / TS / Supabase</p>
             </div>
 
@@ -99,7 +99,7 @@
                     <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
                         <i data-lucide="check-square" class="w-5 h-5"></i>
                     </div>
-                    <span style="font-family: 'Rubik', sans-serif; font-size: 22px; font-weight: 500;" class="text-white">TaskMaster</span>
+                    <span style="font-family: 'Rubik', sans-serif; font-size: 22px; font-weight: 500;" class="text-white">DevKanban</span>
                 </div>
                 <div class="flex items-center space-x-3">
                     <span id="user-email-display" class="text-sm text-slate-400 hidden sm:inline"></span>
@@ -115,7 +115,7 @@
             <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 style="font-family: 'Rubik', sans-serif; font-size: 38px; font-weight: 500;" class="text-white tracking-tight leading-none mb-1">Painel</h2>
-                    <p class="text-sm text-slate-400">Modo Dark Ativo • Ícone PNG PWA configurado com sucesso para a tela inicial.</p>
+                    <p class="text-sm text-slate-400">Modo Dark Ativo • Service Worker PWA configurado para o ícone de instalação.</p>
                 </div>
                 <div class="flex gap-2 flex-wrap">
                     <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">TypeScript</span>
@@ -159,8 +159,20 @@
         </main>
     </div>
 
-    <!-- Script de Execução Online -->
+    <!-- Script de Execução Online e Registro do Service Worker -->
     <script>
+        // Registro do Service Worker via Blob para habilitar o prompt e ícone oficial do PWA
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', (e) => { self.skipWaiting(); });
+                self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
+                self.addEventListener('fetch', (e) => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
+            `;
+            const blob = new Blob([swCode], { type: 'text/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration failed: ', err));
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
@@ -169,7 +181,7 @@
         });
 
         let filter = 'all';
-        let tasks = JSON.parse(localStorage.getItem('gh_tasks_dark_v3')) || [
+        let tasks = JSON.parse(localStorage.getItem('gh_tasks_dark_v4')) || [
             { id: 1, title: 'Configurar Servidor Node.js', desc: 'Estruturar Express e rotas iniciais', completed: true },
             { id: 2, title: 'Conectar com Supabase', desc: 'Validar chaves de API e tabelas PostgreSQL', completed: false }
         ];
@@ -182,12 +194,12 @@
         function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
-            localStorage.setItem('gh_user_dark_v3', email);
+            localStorage.setItem('gh_user_dark_v4', email);
             showHome(email);
         }
 
         function checkInitialSession() {
-            const user = localStorage.getItem('gh_user_dark_v3');
+            const user = localStorage.getItem('gh_user_dark_v4');
             if (user) {
                 showHome(user);
             }
@@ -207,7 +219,7 @@
         }
 
         function handleLogout() {
-            localStorage.removeItem('gh_user_dark_v3');
+            localStorage.removeItem('gh_user_dark_v4');
             window.location.reload();
         }
 
@@ -256,7 +268,7 @@
         }
 
         function sync() {
-            localStorage.setItem('gh_tasks_dark_v3', JSON.stringify(tasks));
+            localStorage.setItem('gh_tasks_dark_v4', JSON.stringify(tasks));
             render();
         }
 
