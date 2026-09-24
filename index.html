@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TaskMaster - Dark Edition</title>
     
-    <!-- Configurações PWA -->
     <meta name="theme-color" content="#09090b">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,18 +12,13 @@
     <meta name="apple-mobile-web-app-title" content="TaskMaster">
     <meta name="application-name" content="TaskMaster">
 
-    <!-- Ícone SVG Customizado -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%234f46e5'/><path d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='52' stroke-linecap='round' stroke-linejoin='round'/></svg>">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%234f46e5'/><path d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='52' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
-    <!-- Manifest URL-encoded -->
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22TaskMaster%22%2C%22short_name%22%3A%22TaskMaster%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527120%2527%2520fill%253D%2527%25234f46e5%2527%2F%253E%253Cpath%2520d%253D%2527M160%2520260l70%252070%2520130-140%2527%2520fill%253D%2527none%2527%2520stroke%253D%2527%2523ffffff%2527%2520stroke-width%253D%252752%2527%2520stroke-linecap%253D%2527round%2527%2520stroke-linejoin%253D%2527round%2527%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%2520maskable%22%7D%5D%7D">
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rubik:wght@500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -94,7 +88,6 @@
             </div>
         </header>
 
-        <!-- Navegação por Abas -->
         <nav class="bg-slate-950 border-b border-slate-800 px-4 pt-3 flex justify-between items-center overflow-x-auto">
             <div id="container-abas" class="flex space-x-2 pb-2"></div>
             <button onclick="abrirModalAba()" class="text-slate-400 hover:text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-md text-xs sm:text-sm transition flex items-center gap-1 whitespace-nowrap mb-2 ml-2 cursor-pointer">
@@ -104,7 +97,6 @@
         </nav>
 
         <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full space-y-6">
-            <!-- Banner -->
             <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 style="font-family: 'Rubik', sans-serif; font-size: 38px; font-weight: 500;" class="text-white tracking-tight leading-none mb-1">Painel</h2>
@@ -118,11 +110,20 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Formulário -->
-                <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg space-y-4 h-fit">
-                    <h3 id="form-title" class="font-semibold text-white">Nova Tarefa</h3>
-                    <form id="task-form" class="space-y-3" onsubmit="handleAddTask(event)">
-                        <input type="hidden" id="task-edit-id" value="">
+                <!-- ==================== FORMULÁRIO ==================== -->
+                <div id="form-card" class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg space-y-4 h-fit transition-colors">
+                    <!-- Header dinâmico -->
+                    <div class="flex items-center justify-between">
+                        <h3 id="form-title" class="font-semibold text-white flex items-center gap-2">
+                            <i data-lucide="plus-circle" class="w-4 h-4 text-indigo-400"></i>
+                            <span>Nova Tarefa</span>
+                        </h3>
+                        <span id="form-mode-badge" class="hidden text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/50">
+                            Editando
+                        </span>
+                    </div>
+
+                    <form id="task-form" class="space-y-3" onsubmit="TaskForm.submit(event)">
                         <div>
                             <label class="text-xs font-medium text-slate-400">Título</label>
                             <input type="text" id="task-title" required placeholder="Ex: Ajustar rotas" class="mt-1 h-9 w-full rounded-md border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -132,7 +133,7 @@
                             <textarea id="task-desc" placeholder="Detalhes opcionais..." class="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
                         </div>
 
-                        <!-- Checklist / Subtarefas -->
+                        <!-- Checklist -->
                         <div>
                             <div class="flex items-center justify-between mb-1">
                                 <label class="text-xs font-medium text-slate-400 flex items-center gap-1">
@@ -142,24 +143,26 @@
                                 <span id="checklist-counter" class="text-[10px] text-slate-500">0 itens</span>
                             </div>
                             <div id="checklist-builder" class="space-y-1.5 max-h-40 overflow-y-auto pr-1"></div>
-                            <button type="button" onclick="addChecklistItem()" class="mt-2 w-full text-xs text-indigo-400 hover:text-indigo-300 border border-dashed border-slate-700 hover:border-indigo-500/50 rounded-md py-1.5 transition flex items-center justify-center gap-1 cursor-pointer">
+                            <button type="button" onclick="TaskForm.addChecklistItem()" class="mt-2 w-full text-xs text-indigo-400 hover:text-indigo-300 border border-dashed border-slate-700 hover:border-indigo-500/50 rounded-md py-1.5 transition flex items-center justify-center gap-1 cursor-pointer">
                                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                                 <span>Adicionar item</span>
                             </button>
                         </div>
 
+                        <!-- Botões -->
                         <div class="flex gap-2">
                             <button type="submit" id="task-submit-btn" class="flex-1 h-9 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-indigo-600/25 cursor-pointer">
-                                <i data-lucide="plus" class="w-4 h-4"></i> Adicionar Tarefa
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span>Adicionar Tarefa</span>
                             </button>
-                            <button type="button" id="task-cancel-btn" onclick="cancelEdit()" class="hidden h-9 px-3 bg-slate-800 text-slate-300 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors cursor-pointer">
+                            <button type="button" id="task-cancel-btn" onclick="TaskForm.cancel()" class="hidden h-9 px-3 bg-slate-800 text-slate-300 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors cursor-pointer">
                                 Cancelar
                             </button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Lista de Tarefas -->
+                <!-- ==================== LISTA ==================== -->
                 <div class="md:col-span-2 bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg space-y-4 flex flex-col">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <h3 class="font-semibold text-white">Tarefas</h3>
@@ -169,9 +172,9 @@
                             <button type="button" onclick="setFilter('completed')" id="btn-completed" class="px-2.5 py-1 rounded text-slate-400 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">Concluídas</button>
                         </div>
                     </div>
-                    <p class="text-[10px] text-slate-500 flex items-center gap-1">
+                    <p class="text-[10px] text-slate-500 flex items-center gap-1 flex-wrap">
                         <i data-lucide="move-vertical" class="w-3 h-3"></i>
-                        Dica: use as setas ↑↓ ou arraste pelo ícone <i data-lucide="grip-vertical" class="w-3 h-3 inline"></i> para reordenar.
+                        Use ↑↓ ou arraste pelo <i data-lucide="grip-vertical" class="w-3 h-3 inline"></i> para reordenar.
                     </p>
                     <div id="tasks-list" class="divide-y divide-slate-800/60 overflow-y-auto max-h-[500px] flex-1"></div>
                 </div>
@@ -200,7 +203,7 @@
     </div>
 
     <script>
-        // ====================== SUPABASE ======================
+        // ====================== CONFIG ======================
         const SUPABASE_URL = 'https://gjuyamxzcjxyulsfplja.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_vXqWeag_-OIBATj13s-T5w_YuLU3b3U';
         const TABLE_NAME = 'taskmaster_data';
@@ -208,14 +211,11 @@
 
         // ====================== ESTADO ======================
         let dadosApp = {
-            abas: [
-                { id: 'geral', nome: 'Geral' }
-            ],
+            abas: [{ id: 'geral', nome: 'Geral' }],
             abaAtiva: 'geral',
             tarefas: [
                 {
-                    id: 1,
-                    abaId: 'geral',
+                    id: 1, abaId: 'geral',
                     title: 'Configurar Servidor Node.js',
                     desc: 'Estruturar Express e rotas iniciais',
                     completed: true,
@@ -226,8 +226,7 @@
                     ]
                 },
                 {
-                    id: 2,
-                    abaId: 'geral',
+                    id: 2, abaId: 'geral',
                     title: 'Conectar com Supabase',
                     desc: 'Validar chaves de API e tabelas PostgreSQL',
                     completed: false,
@@ -241,10 +240,9 @@
         };
 
         let filter = 'all';
-        let checklistBuffer = [];
-        let editingTaskId = null;
+        let expandedTasks = new Set();
 
-        // ====================== HEADERS PADRÃO ======================
+        // ====================== HELPERS ======================
         function getHeaders(extra = {}) {
             return {
                 'apikey': SUPABASE_KEY,
@@ -253,21 +251,26 @@
                 ...extra
             };
         }
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+        function uid(prefix = '') {
+            return prefix + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+        }
+        function refreshIcons() {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
 
-        // ====================== SUPABASE: LOAD / SAVE ======================
+        // ====================== SUPABASE ======================
         async function carregarDadosDoSupabase() {
             const statusEl = document.getElementById('sync-status');
             try {
                 const url = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?id=eq.${RECORD_ID}&select=content`;
                 const response = await fetch(url, { method: 'GET', headers: getHeaders() });
-
-                if (!response.ok) {
-                    const errText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errText}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
                 const result = await response.json();
 
-                if (result && result.length > 0 && result[0].content) {
+                if (result?.[0]?.content) {
                     const cloud = result[0].content;
                     if (cloud.tarefas && !cloud.abas) {
                         dadosApp.abas = [{ id: 'geral', nome: 'Geral' }];
@@ -280,7 +283,7 @@
                     statusEl.textContent = '● Sincronizado na nuvem';
                     statusEl.className = 'text-[10px] text-emerald-400 font-medium leading-none mt-0.5';
                 } else {
-                    await salvarDadosNoSupabase();
+                    await persistToSupabase();
                     statusEl.textContent = '● Sincronizado na nuvem';
                     statusEl.className = 'text-[10px] text-emerald-400 font-medium leading-none mt-0.5';
                 }
@@ -294,39 +297,7 @@
             render();
         }
 
-        async function salvarDados() {
-            render();
-            localStorage.setItem('gh_tasks_dark_v3', JSON.stringify(dadosApp));
-
-            const statusEl = document.getElementById('sync-status');
-            statusEl.textContent = '● A guardar...';
-            statusEl.className = 'text-[10px] text-amber-400 font-medium leading-none mt-0.5';
-
-            try {
-                const url = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}`;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: getHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
-                    body: JSON.stringify({
-                        id: RECORD_ID,
-                        content: dadosApp,
-                        updated_at: new Date().toISOString()
-                    })
-                });
-                if (!response.ok) {
-                    const errText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errText}`);
-                }
-                statusEl.textContent = '● Sincronizado na nuvem';
-                statusEl.className = 'text-[10px] text-emerald-400 font-medium leading-none mt-0.5';
-            } catch (err) {
-                console.error('Erro ao guardar:', err);
-                statusEl.textContent = '● Erro ao guardar';
-                statusEl.className = 'text-[10px] text-rose-400 font-medium leading-none mt-0.5';
-            }
-        }
-
-        async function salvarDadosNoSupabase() {
+        async function persistToSupabase() {
             const url = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}`;
             const response = await fetch(url, {
                 method: 'POST',
@@ -337,9 +308,25 @@
                     updated_at: new Date().toISOString()
                 })
             });
-            if (!response.ok) {
-                const errText = await response.text();
-                throw new Error(`HTTP ${response.status}: ${errText}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+        }
+
+        async function salvarDados() {
+            render();
+            localStorage.setItem('gh_tasks_dark_v3', JSON.stringify(dadosApp));
+
+            const statusEl = document.getElementById('sync-status');
+            statusEl.textContent = '● A guardar...';
+            statusEl.className = 'text-[10px] text-amber-400 font-medium leading-none mt-0.5';
+
+            try {
+                await persistToSupabase();
+                statusEl.textContent = '● Sincronizado na nuvem';
+                statusEl.className = 'text-[10px] text-emerald-400 font-medium leading-none mt-0.5';
+            } catch (err) {
+                console.error('Erro ao guardar:', err);
+                statusEl.textContent = '● Erro ao guardar';
+                statusEl.className = 'text-[10px] text-rose-400 font-medium leading-none mt-0.5';
             }
         }
 
@@ -369,47 +356,216 @@
             window.location.reload();
         }
 
-        // ====================== CHECKLIST BUILDER ======================
-        function addChecklistItem(text = '', done = false) {
-            const id = 'tmp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
-            checklistBuffer.push({ id, text, done });
-            renderChecklistBuilder();
-        }
-        function removeChecklistItem(id) {
-            checklistBuffer = checklistBuffer.filter(i => i.id !== id);
-            renderChecklistBuilder();
-        }
-        function updateChecklistItem(id, text) {
-            const item = checklistBuffer.find(i => i.id === id);
-            if (item) item.text = text;
-        }
-        function renderChecklistBuilder() {
-            const container = document.getElementById('checklist-builder');
-            const counter = document.getElementById('checklist-counter');
-            if (!container) return;
+        // ================================================================
+        //  TASK FORM — controlador único (criar + editar)
+        // ================================================================
+        const TaskForm = {
+            /** @type {'create' | 'edit'} */
+            mode: 'create',
+            /** ID da tarefa em edição (ou null) */
+            editingId: null,
+            /** Buffer do checklist em edição */
+            checklist: [],
+            /** Snapshot para detectar mudanças ao cancelar */
+            _snapshot: null,
 
-            if (checklistBuffer.length === 0) {
-                container.innerHTML = `<p class="text-[11px] text-slate-500 italic py-1">Nenhum item ainda. Clique em "Adicionar item".</p>`;
-            } else {
-                container.innerHTML = checklistBuffer.map(item => `
-                    <div class="flex items-center gap-1.5 group">
-                        <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 cursor-pointer shrink-0"
-                            onchange="const i=checklistBuffer.find(x=>x.id==='${item.id}'); if(i) i.done=this.checked;"
-                            ${item.done ? 'checked' : ''}>
-                        <input type="text"
-                            value="${escapeHtml(item.text)}"
-                            placeholder="Descrição do item..."
-                            oninput="updateChecklistItem('${item.id}', this.value)"
-                            class="flex-1 h-7 bg-slate-950 border border-slate-700 rounded px-2 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                        <button type="button" onclick="removeChecklistItem('${item.id}')" class="text-slate-500 hover:text-red-400 p-1 shrink-0 cursor-pointer" title="Remover">
-                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                `).join('');
+            // ---------- Elementos DOM (cache) ----------
+            el: {},
+
+            init() {
+                this.el = {
+                    card:        document.getElementById('form-card'),
+                    title:       document.getElementById('form-title'),
+                    modeBadge:   document.getElementById('form-mode-badge'),
+                    taskTitle:   document.getElementById('task-title'),
+                    taskDesc:    document.getElementById('task-desc'),
+                    submitBtn:   document.getElementById('task-submit-btn'),
+                    cancelBtn:   document.getElementById('task-cancel-btn'),
+                    checklistEl: document.getElementById('checklist-builder'),
+                    counter:     document.getElementById('checklist-counter'),
+                };
+                this.renderChecklist();
+            },
+
+            // ---------- API pública ----------
+
+            /** Inicia edição de uma tarefa existente */
+            edit(taskId) {
+                const task = dadosApp.tarefas.find(t => t.id === Number(taskId));
+                if (!task) return;
+
+                this.mode = 'edit';
+                this.editingId = task.id;
+                this.checklist = (task.checklist || []).map(i => ({ ...i }));
+
+                this.el.taskTitle.value = task.title;
+                this.el.taskDesc.value = task.desc || '';
+                this._snapshot = this._takeSnapshot();
+
+                this._applyModeUI();
+                this.renderChecklist();
+
+                this.el.taskTitle.focus();
+                this.el.card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            },
+
+            /** Cancela edição e volta ao modo criar */
+            cancel() {
+                if (this.mode === 'edit' && this._hasChanges()) {
+                    if (!confirm('Descartar as alterações não salvas?')) return;
+                }
+                this.reset();
+            },
+
+            /** Volta o formulário ao estado inicial (criar) */
+            reset() {
+                this.mode = 'create';
+                this.editingId = null;
+                this.checklist = [];
+                this._snapshot = null;
+
+                this.el.taskTitle.value = '';
+                this.el.taskDesc.value = '';
+
+                this._applyModeUI();
+                this.renderChecklist();
+            },
+
+            /** Handler do submit (criar OU editar) */
+            submit(e) {
+                e.preventDefault();
+                const title = this.el.taskTitle.value.trim();
+                if (!title) return;
+
+                const desc = this.el.taskDesc.value.trim();
+                // Filtra itens vazios e atribui IDs definitivos
+                const cleanChecklist = this.checklist
+                    .filter(i => i.text.trim() !== '')
+                    .map(i => ({
+                        id: i.id && !i.id.startsWith('tmp_') ? i.id : uid('c_'),
+                        text: i.text.trim(),
+                        done: !!i.done
+                    }));
+
+                if (this.mode === 'edit') {
+                    this._applyEdit(title, desc, cleanChecklist);
+                } else {
+                    this._applyCreate(title, desc, cleanChecklist);
+                }
+
+                salvarDados();
+                this.reset();
+            },
+
+            // ---------- Checklist ----------
+            addChecklistItem(text = '', done = false) {
+                this.checklist.push({ id: uid('tmp_'), text, done });
+                this.renderChecklist();
+                // Foca no último input adicionado
+                requestAnimationFrame(() => {
+                    const inputs = this.el.checklistEl.querySelectorAll('input[type="text"]');
+                    const last = inputs[inputs.length - 1];
+                    if (last) last.focus();
+                });
+            },
+
+            removeChecklistItem(id) {
+                this.checklist = this.checklist.filter(i => i.id !== id);
+                this.renderChecklist();
+            },
+
+            updateChecklistItem(id, field, value) {
+                const item = this.checklist.find(i => i.id === id);
+                if (item) item[field] = value;
+            },
+
+            renderChecklist() {
+                const el = this.el;
+                if (!el.checklistEl) return;
+
+                if (this.checklist.length === 0) {
+                    el.checklistEl.innerHTML = `<p class="text-[11px] text-slate-500 italic py-1">Nenhum item ainda. Clique em "Adicionar item".</p>`;
+                } else {
+                    el.checklistEl.innerHTML = this.checklist.map(item => `
+                        <div class="flex items-center gap-1.5">
+                            <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 cursor-pointer shrink-0"
+                                ${item.done ? 'checked' : ''}
+                                onchange="TaskForm.updateChecklistItem('${item.id}', 'done', this.checked)">
+                            <input type="text"
+                                value="${escapeHtml(item.text)}"
+                                placeholder="Descrição do item..."
+                                oninput="TaskForm.updateChecklistItem('${item.id}', 'text', this.value)"
+                                class="flex-1 h-7 bg-slate-950 border border-slate-700 rounded px-2 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                            <button type="button" onclick="TaskForm.removeChecklistItem('${item.id}')" class="text-slate-500 hover:text-red-400 p-1 shrink-0 cursor-pointer" title="Remover">
+                                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+
+                el.counter.textContent = `${this.checklist.length} ${this.checklist.length === 1 ? 'item' : 'itens'}`;
+                refreshIcons();
+            },
+
+            // ---------- Internos ----------
+            _applyModeUI() {
+                const el = this.el;
+                if (this.mode === 'edit') {
+                    el.card.classList.add('ring-1', 'ring-emerald-500/30');
+                    el.title.innerHTML = `<i data-lucide="pencil" class="w-4 h-4 text-emerald-400"></i><span>Editando Tarefa</span>`;
+                    el.modeBadge.classList.remove('hidden');
+                    el.submitBtn.className = 'flex-1 h-9 bg-emerald-600 text-white rounded-md text-sm font-medium hover:bg-emerald-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-emerald-600/25 cursor-pointer';
+                    el.submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Salvar</span>';
+                    el.cancelBtn.classList.remove('hidden');
+                } else {
+                    el.card.classList.remove('ring-1', 'ring-emerald-500/30');
+                    el.title.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4 text-indigo-400"></i><span>Nova Tarefa</span>`;
+                    el.modeBadge.classList.add('hidden');
+                    el.submitBtn.className = 'flex-1 h-9 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-indigo-600/25 cursor-pointer';
+                    el.submitBtn.innerHTML = '<i data-lucide="plus" class="w-4 h-4"></i><span>Adicionar Tarefa</span>';
+                    el.cancelBtn.classList.add('hidden');
+                }
+                refreshIcons();
+            },
+
+            _applyCreate(title, desc, checklist) {
+                dadosApp.tarefas.unshift({
+                    id: Date.now(),
+                    abaId: dadosApp.abaAtiva,
+                    title,
+                    desc,
+                    completed: false,
+                    checklist
+                });
+            },
+
+            _applyEdit(title, desc, newChecklist) {
+                const task = dadosApp.tarefas.find(t => t.id === this.editingId);
+                if (!task) return;
+                task.title = title;
+                task.desc = desc;
+                // Reaproveita IDs dos itens que não mudaram de texto (mantém done)
+                task.checklist = newChecklist;
+            },
+
+            _takeSnapshot() {
+                return JSON.stringify({
+                    title: this.el.taskTitle.value,
+                    desc: this.el.taskDesc.value,
+                    checklist: this.checklist
+                });
+            },
+
+            _hasChanges() {
+                if (!this._snapshot) return false;
+                const now = JSON.stringify({
+                    title: this.el.taskTitle.value,
+                    desc: this.el.taskDesc.value,
+                    checklist: this.checklist
+                });
+                return now !== this._snapshot;
             }
-            if (counter) counter.textContent = `${checklistBuffer.length} ${checklistBuffer.length === 1 ? 'item' : 'itens'}`;
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
+        };
 
         // ====================== ABAS ======================
         function renderizarAbas() {
@@ -424,7 +580,7 @@
                 btn.onclick = () => { dadosApp.abaAtiva = aba.id; salvarDados(); };
                 container.appendChild(btn);
             });
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+            refreshIcons();
         }
         function abrirModalAba() {
             document.getElementById('modal-aba').classList.remove('hidden');
@@ -439,7 +595,7 @@
             e.preventDefault();
             const nome = document.getElementById('aba-nome').value.trim();
             if (!nome) return;
-            const novaId = 'aba_' + Date.now();
+            const novaId = uid('aba_');
             dadosApp.abas.push({ id: novaId, nome });
             dadosApp.abaAtiva = novaId;
             salvarDados();
@@ -455,110 +611,17 @@
             }
         }
 
-        // ====================== CRIAR / EDITAR TAREFA ======================
-        function handleAddTask(e) {
-            e.preventDefault();
-            const titleInput = document.getElementById('task-title');
-            const descInput = document.getElementById('task-desc');
-            if (!titleInput || !titleInput.value.trim()) return;
-
-            const checklist = checklistBuffer
-                .filter(i => i.text.trim() !== '')
-                .map(i => ({
-                    id: i.id.startsWith('c_') || i.id.startsWith('tmp_') ? 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6) : i.id,
-                    text: i.text.trim(),
-                    done: !!i.done
-                }));
-
-            if (editingTaskId !== null) {
-                // MODO EDIÇÃO
-                const task = dadosApp.tarefas.find(t => t.id === Number(editingTaskId));
-                if (task) {
-                    task.title = titleInput.value.trim();
-                    task.desc = descInput.value.trim();
-                    // Reaproveita IDs dos itens que já existiam (mesma posição)
-                    task.checklist = checklist.map((newItem, idx) => {
-                        const oldItem = (task.checklist || [])[idx];
-                        return oldItem && oldItem.text === newItem.text ? oldItem : newItem;
-                    });
-                }
-            } else {
-                // MODO CRIAÇÃO
-                const newTask = {
-                    id: Date.now(),
-                    abaId: dadosApp.abaAtiva,
-                    title: titleInput.value.trim(),
-                    desc: descInput.value.trim(),
-                    completed: false,
-                    checklist
-                };
-                dadosApp.tarefas.unshift(newTask);
-            }
-
-            salvarDados();
-            resetForm();
-        }
-
-        function startEdit(taskId) {
-            const task = dadosApp.tarefas.find(t => t.id === Number(taskId));
-            if (!task) return;
-
-            editingTaskId = task.id;
-            document.getElementById('task-edit-id').value = task.id;
-            document.getElementById('task-title').value = task.title;
-            document.getElementById('task-desc').value = task.desc || '';
-
-            // Carrega checklist no buffer
-            checklistBuffer = (task.checklist || []).map(i => ({ ...i }));
-            renderChecklistBuilder();
-
-            // Muda o cabeçalho e botão
-            document.getElementById('form-title').innerHTML = `<span class="flex items-center gap-2"><i data-lucide="pencil" class="w-4 h-4 text-indigo-400"></i> Editando Tarefa</span>`;
-            const submitBtn = document.getElementById('task-submit-btn');
-            submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Salvar Alterações';
-            submitBtn.className = 'flex-1 h-9 bg-emerald-600 text-white rounded-md text-sm font-medium hover:bg-emerald-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-emerald-600/25 cursor-pointer';
-            document.getElementById('task-cancel-btn').classList.remove('hidden');
-
-            // Foca no título e rola até o form
-            document.getElementById('task-title').focus();
-            document.getElementById('task-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        function cancelEdit() {
-            resetForm();
-        }
-
-        function resetForm() {
-            editingTaskId = null;
-            document.getElementById('task-edit-id').value = '';
-            document.getElementById('task-title').value = '';
-            document.getElementById('task-desc').value = '';
-            checklistBuffer = [];
-            renderChecklistBuilder();
-
-            document.getElementById('form-title').textContent = 'Nova Tarefa';
-            const submitBtn = document.getElementById('task-submit-btn');
-            submitBtn.innerHTML = '<i data-lucide="plus" class="w-4 h-4"></i> Adicionar Tarefa';
-            submitBtn.className = 'flex-1 h-9 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-indigo-600/25 cursor-pointer';
-            document.getElementById('task-cancel-btn').classList.add('hidden');
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
+        // ====================== TAREFAS ======================
         function toggleTask(id) {
             dadosApp.tarefas = dadosApp.tarefas.map(t => t.id === Number(id) ? { ...t, completed: !t.completed } : t);
             salvarDados();
         }
-
         function deleteTask(id) {
             if (!confirm('Excluir esta tarefa?')) return;
             dadosApp.tarefas = dadosApp.tarefas.filter(t => t.id !== Number(id));
-            // Se estava editando essa tarefa, cancela
-            if (editingTaskId === Number(id)) resetForm();
+            if (TaskForm.editingId === Number(id)) TaskForm.reset();
             salvarDados();
         }
-
         function toggleChecklistItem(taskId, itemId) {
             const task = dadosApp.tarefas.find(t => t.id === Number(taskId));
             if (!task || !task.checklist) return;
@@ -574,17 +637,12 @@
         }
 
         // ====================== REORDENAÇÃO ======================
-        // Retorna os IDs das tarefas visíveis (respeitando filtro), na ordem atual
         function getVisibleTaskIds() {
             let data = dadosApp.tarefas.filter(t => t.abaId === dadosApp.abaAtiva);
             if (filter === 'pending') data = data.filter(t => !t.completed);
             if (filter === 'completed') data = data.filter(t => t.completed);
             return data.map(t => t.id);
         }
-
-        // Move a tarefa para cima/baixo dentro do array global
-        // Funciona com o filtro ativo: troca de posição apenas com a tarefa
-        // adjacente visível (mantendo as outras no lugar)
         function moveTask(taskId, direction) {
             const visibleIds = getVisibleTaskIds();
             const idx = visibleIds.indexOf(taskId);
@@ -597,88 +655,70 @@
             const realIdxB = dadosApp.tarefas.findIndex(t => t.id === otherId);
             if (realIdxA === -1 || realIdxB === -1) return;
 
-            // Troca posições no array principal
-            const temp = dadosApp.tarefas[realIdxA];
-            dadosApp.tarefas[realIdxA] = dadosApp.tarefas[realIdxB];
-            dadosApp.tarefas[realIdxB] = temp;
-
+            [dadosApp.tarefas[realIdxA], dadosApp.tarefas[realIdxB]] = [dadosApp.tarefas[realIdxB], dadosApp.tarefas[realIdxA]];
             salvarDados();
         }
 
-        // ====================== DRAG AND DROP ======================
+        // ====================== DRAG & DROP ======================
         let draggedTaskId = null;
-
         function onDragStart(e, taskId) {
             draggedTaskId = taskId;
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/plain', taskId);
             e.currentTarget.classList.add('opacity-50');
         }
-
         function onDragEnd(e) {
             e.currentTarget.classList.remove('opacity-50');
-            // Remove todas as classes de drop-target
             document.querySelectorAll('.drop-target-top, .drop-target-bottom').forEach(el => {
                 el.classList.remove('drop-target-top', 'drop-target-bottom');
             });
         }
-
         function onDragOver(e, taskId) {
             e.preventDefault();
             if (draggedTaskId === taskId) return;
             const rect = e.currentTarget.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            const isTop = e.clientY < midY;
+            const isTop = e.clientY < rect.top + rect.height / 2;
             e.currentTarget.classList.toggle('drop-target-top', isTop);
             e.currentTarget.classList.toggle('drop-target-bottom', !isTop);
         }
-
         function onDragLeave(e) {
             e.currentTarget.classList.remove('drop-target-top', 'drop-target-bottom');
         }
-
         function onDrop(e, targetTaskId) {
             e.preventDefault();
             const rect = e.currentTarget.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            const insertBefore = e.clientY < midY;
-
+            const insertBefore = e.clientY < rect.top + rect.height / 2;
             e.currentTarget.classList.remove('drop-target-top', 'drop-target-bottom');
 
             if (draggedTaskId === null || draggedTaskId === targetTaskId) return;
 
-            // Reordena no array global
             const fromIdx = dadosApp.tarefas.findIndex(t => t.id === Number(draggedTaskId));
             if (fromIdx === -1) return;
             const [moved] = dadosApp.tarefas.splice(fromIdx, 1);
 
             let toIdx = dadosApp.tarefas.findIndex(t => t.id === Number(targetTaskId));
-            if (toIdx === -1) {
-                dadosApp.tarefas.push(moved);
-            } else {
+            if (toIdx === -1) dadosApp.tarefas.push(moved);
+            else {
                 if (!insertBefore) toIdx += 1;
                 dadosApp.tarefas.splice(toIdx, 0, moved);
             }
-
             draggedTaskId = null;
             salvarDados();
         }
 
-        // ====================== FILTRO ======================
-        let expandedTasks = new Set();
+        // ====================== FILTROS & EXPANSÃO ======================
         function toggleExpand(taskId) {
             if (expandedTasks.has(taskId)) expandedTasks.delete(taskId);
             else expandedTasks.add(taskId);
             renderTasks();
         }
-
         function setFilter(f) {
             filter = f;
             ['all', 'pending', 'completed'].forEach(type => {
                 const el = document.getElementById(`btn-${type}`);
                 if (el) {
-                    el.className = type === f 
-                        ? "px-2.5 py-1 rounded bg-indigo-600 text-white font-medium transition-colors cursor-pointer" 
+                    el.className = type === f
+                        ? "px-2.5 py-1 rounded bg-indigo-600 text-white font-medium transition-colors cursor-pointer"
                         : "px-2.5 py-1 rounded text-slate-400 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer";
                 }
             });
@@ -701,12 +741,9 @@
 
             if (data.length === 0) {
                 container.innerHTML = `<div class="py-8 text-center text-sm text-slate-500">Nenhuma tarefa encontrada nesta aba.</div>`;
-                if (typeof lucide !== 'undefined') lucide.createIcons();
+                refreshIcons();
                 return;
             }
-
-            // Habilita/desabilita setas com base na posição na lista visível
-            const visibleIds = data.map(t => t.id);
 
             container.innerHTML = data.map((t, idx) => {
                 const checklist = t.checklist || [];
@@ -716,16 +753,15 @@
                 const isExpanded = expandedTasks.has(t.id);
                 const isFirst = idx === 0;
                 const isLast = idx === data.length - 1;
-                const isEditing = editingTaskId === t.id;
+                const isEditing = TaskForm.mode === 'edit' && TaskForm.editingId === t.id;
 
                 return `
-                <div class="py-2 group ${isEditing ? 'bg-indigo-950/20 -mx-2 px-2 rounded-md border border-indigo-800/40' : ''}"
+                <div class="py-2 group ${isEditing ? 'bg-emerald-950/20 -mx-2 px-2 rounded-md border border-emerald-800/40' : ''}"
                      ondragover="onDragOver(event, ${t.id})"
                      ondragleave="onDragLeave(event)"
                      ondrop="onDrop(event, ${t.id})">
 
                     <div class="flex items-start gap-2">
-                        <!-- Drag handle -->
                         <div draggable="true"
                              ondragstart="onDragStart(event, ${t.id})"
                              ondragend="onDragEnd(event)"
@@ -734,7 +770,6 @@
                             <i data-lucide="grip-vertical" class="w-4 h-4"></i>
                         </div>
 
-                        <!-- Setas -->
                         <div class="flex flex-col gap-0.5 mt-0.5 shrink-0">
                             <button type="button" onclick="moveTask(${t.id}, -1)" ${isFirst ? 'disabled' : ''} class="${isFirst ? 'text-slate-700 cursor-not-allowed' : 'text-slate-400 hover:text-indigo-400 cursor-pointer'} p-0.5 transition" title="Mover para cima">
                                 <i data-lucide="chevron-up" class="w-3.5 h-3.5"></i>
@@ -744,10 +779,8 @@
                             </button>
                         </div>
 
-                        <!-- Checkbox principal -->
                         <input type="checkbox" ${t.completed ? 'checked' : ''} onclick="toggleTask(${t.id})" class="mt-1.5 h-4 w-4 rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 cursor-pointer shrink-0">
 
-                        <!-- Conteúdo -->
                         <div class="min-w-0 flex-1">
                             <p class="text-sm font-medium ${t.completed ? 'line-through text-slate-600' : 'text-slate-200'}">${escapeHtml(t.title)}</p>
                             ${t.desc ? `<p class="text-xs text-slate-500 mt-0.5">${escapeHtml(t.desc)}</p>` : ''}
@@ -775,9 +808,8 @@
                             ` : ''}
                         </div>
 
-                        <!-- Ações -->
-                        <div class="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button type="button" onclick="startEdit(${t.id})" class="text-slate-500 hover:text-indigo-400 p-1 cursor-pointer" title="Editar tarefa">
+                        <div class="flex items-center gap-1 shrink-0 ${isEditing ? '' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
+                            <button type="button" onclick="TaskForm.edit(${t.id})" class="text-slate-500 hover:text-emerald-400 p-1 cursor-pointer" title="Editar tarefa">
                                 <i data-lucide="pencil" class="w-4 h-4"></i>
                             </button>
                             <button type="button" onclick="deleteTask(${t.id})" class="text-slate-500 hover:text-red-400 p-1 cursor-pointer" title="Excluir tarefa">
@@ -789,29 +821,27 @@
                 `;
             }).join('');
 
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        function escapeHtml(str) {
-            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            refreshIcons();
         }
 
         // ====================== INIT ======================
         document.addEventListener("DOMContentLoaded", () => {
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            renderChecklistBuilder();
+            refreshIcons();
+            TaskForm.init();
             checkInitialSession();
+
+            // Atalho ESC para cancelar edição
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && TaskForm.mode === 'edit') {
+                    TaskForm.cancel();
+                }
+            });
         });
     </script>
 
     <style>
-        /* Indicadores visuais do drag & drop */
-        .drop-target-top {
-            box-shadow: inset 0 2px 0 0 #6366f1;
-        }
-        .drop-target-bottom {
-            box-shadow: inset 0 -2px 0 0 #6366f1;
-        }
+        .drop-target-top    { box-shadow: inset 0  2px 0 0 #6366f1; }
+        .drop-target-bottom { box-shadow: inset 0 -2px 0 0 #6366f1; }
     </style>
 </body>
 </html>
