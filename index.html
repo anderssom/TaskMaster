@@ -120,8 +120,9 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Formulário -->
                 <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg space-y-4 h-fit">
-                    <h3 class="font-semibold text-white">Nova Tarefa</h3>
+                    <h3 id="form-title" class="font-semibold text-white">Nova Tarefa</h3>
                     <form id="task-form" class="space-y-3" onsubmit="handleAddTask(event)">
+                        <input type="hidden" id="task-edit-id" value="">
                         <div>
                             <label class="text-xs font-medium text-slate-400">Título</label>
                             <input type="text" id="task-title" required placeholder="Ex: Ajustar rotas" class="mt-1 h-9 w-full rounded-md border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -147,9 +148,14 @@
                             </button>
                         </div>
 
-                        <button type="submit" class="w-full h-9 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-indigo-600/25 cursor-pointer">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Adicionar Tarefa
-                        </button>
+                        <div class="flex gap-2">
+                            <button type="submit" id="task-submit-btn" class="flex-1 h-9 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-indigo-600/25 cursor-pointer">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Adicionar Tarefa
+                            </button>
+                            <button type="button" id="task-cancel-btn" onclick="cancelEdit()" class="hidden h-9 px-3 bg-slate-800 text-slate-300 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors cursor-pointer">
+                                Cancelar
+                            </button>
+                        </div>
                     </form>
                 </div>
 
@@ -163,6 +169,10 @@
                             <button type="button" onclick="setFilter('completed')" id="btn-completed" class="px-2.5 py-1 rounded text-slate-400 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">Concluídas</button>
                         </div>
                     </div>
+                    <p class="text-[10px] text-slate-500 flex items-center gap-1">
+                        <i data-lucide="move-vertical" class="w-3 h-3"></i>
+                        Dica: use as setas ↑↓ ou arraste pelo ícone <i data-lucide="grip-vertical" class="w-3 h-3 inline"></i> para reordenar.
+                    </p>
                     <div id="tasks-list" class="divide-y divide-slate-800/60 overflow-y-auto max-h-[500px] flex-1"></div>
                 </div>
             </div>
@@ -231,8 +241,8 @@
         };
 
         let filter = 'all';
-        // Buffer temporário do checklist no formulário de criação
         let checklistBuffer = [];
+        let editingTaskId = null;
 
         // ====================== HEADERS PADRÃO ======================
         function getHeaders(extra = {}) {
@@ -249,10 +259,7 @@
             const statusEl = document.getElementById('sync-status');
             try {
                 const url = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?id=eq.${RECORD_ID}&select=content`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: getHeaders()
-                });
+                const response = await fetch(url, { method: 'GET', headers: getHeaders() });
 
                 if (!response.ok) {
                     const errText = await response.text();
@@ -267,7 +274,6 @@
                         dadosApp.abaAtiva = 'geral';
                         dadosApp.tarefas = cloud.tarefas.map(t => ({ ...t, abaId: 'geral', checklist: t.checklist || [] }));
                     } else if (cloud.abas && cloud.tarefas) {
-                        // Garante que toda tarefa tenha checklist
                         cloud.tarefas = cloud.tarefas.map(t => ({ ...t, checklist: t.checklist || [] }));
                         dadosApp = cloud;
                     }
@@ -283,9 +289,7 @@
                 statusEl.textContent = '● Offline (usando local)';
                 statusEl.className = 'text-[10px] text-rose-400 font-medium leading-none mt-0.5';
                 const local = localStorage.getItem('gh_tasks_dark_v3');
-                if (local) {
-                    try { dadosApp = JSON.parse(local); } catch(e) {}
-                }
+                if (local) { try { dadosApp = JSON.parse(local); } catch(e) {} }
             }
             render();
         }
@@ -309,7 +313,6 @@
                         updated_at: new Date().toISOString()
                     })
                 });
-
                 if (!response.ok) {
                     const errText = await response.text();
                     throw new Error(`HTTP ${response.status}: ${errText}`);
@@ -345,51 +348,41 @@
             document.getElementById('login-email').value = 'dev@taskmaster.com';
             document.getElementById('login-password').value = '123456';
         }
-
         function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             localStorage.setItem('gh_user_dark_v2', email);
             showHome(email);
         }
-
         function checkInitialSession() {
             const user = localStorage.getItem('gh_user_dark_v2');
             if (user) showHome(user);
         }
-
         function showHome(email) {
-            const loginPage = document.getElementById('login-page');
-            const homePage = document.getElementById('home-page');
-            if (loginPage) loginPage.classList.add('hidden');
-            if (homePage) homePage.classList.remove('hidden');
-            const emailDisplay = document.getElementById('user-email-display');
-            if (emailDisplay) emailDisplay.innerText = email;
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('home-page').classList.remove('hidden');
+            document.getElementById('user-email-display').innerText = email;
             carregarDadosDoSupabase();
         }
-
         function handleLogout() {
             localStorage.removeItem('gh_user_dark_v2');
             window.location.reload();
         }
 
-        // ====================== CHECKLIST BUILDER (formulário) ======================
-        function addChecklistItem(text = '') {
+        // ====================== CHECKLIST BUILDER ======================
+        function addChecklistItem(text = '', done = false) {
             const id = 'tmp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
-            checklistBuffer.push({ id, text, done: false });
+            checklistBuffer.push({ id, text, done });
             renderChecklistBuilder();
         }
-
         function removeChecklistItem(id) {
             checklistBuffer = checklistBuffer.filter(i => i.id !== id);
             renderChecklistBuilder();
         }
-
         function updateChecklistItem(id, text) {
             const item = checklistBuffer.find(i => i.id === id);
             if (item) item.text = text;
         }
-
         function renderChecklistBuilder() {
             const container = document.getElementById('checklist-builder');
             const counter = document.getElementById('checklist-counter');
@@ -414,7 +407,6 @@
                     </div>
                 `).join('');
             }
-
             if (counter) counter.textContent = `${checklistBuffer.length} ${checklistBuffer.length === 1 ? 'item' : 'itens'}`;
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
@@ -434,7 +426,6 @@
             });
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
-
         function abrirModalAba() {
             document.getElementById('modal-aba').classList.remove('hidden');
             document.getElementById('modal-aba').classList.add('flex');
@@ -444,7 +435,6 @@
             document.getElementById('modal-aba').classList.add('hidden');
             document.getElementById('form-aba').reset();
         }
-
         function salvarAba(e) {
             e.preventDefault();
             const nome = document.getElementById('aba-nome').value.trim();
@@ -455,7 +445,6 @@
             salvarDados();
             fecharModalAba();
         }
-
         function deletarAba(id) {
             if (dadosApp.abas.length <= 1) return alert('Tem de ter pelo menos uma aba.');
             if (confirm('Deseja excluir esta aba e todas as suas tarefas?')) {
@@ -466,38 +455,95 @@
             }
         }
 
-        // ====================== TAREFAS ======================
+        // ====================== CRIAR / EDITAR TAREFA ======================
         function handleAddTask(e) {
             e.preventDefault();
             const titleInput = document.getElementById('task-title');
             const descInput = document.getElementById('task-desc');
             if (!titleInput || !titleInput.value.trim()) return;
 
-            // Filtra itens vazios do checklist
             const checklist = checklistBuffer
                 .filter(i => i.text.trim() !== '')
                 .map(i => ({
-                    id: 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    id: i.id.startsWith('c_') || i.id.startsWith('tmp_') ? 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6) : i.id,
                     text: i.text.trim(),
                     done: !!i.done
                 }));
 
-            const newTask = {
-                id: Date.now(),
-                abaId: dadosApp.abaAtiva,
-                title: titleInput.value.trim(),
-                desc: descInput ? descInput.value.trim() : '',
-                completed: false,
-                checklist
-            };
+            if (editingTaskId !== null) {
+                // MODO EDIÇÃO
+                const task = dadosApp.tarefas.find(t => t.id === Number(editingTaskId));
+                if (task) {
+                    task.title = titleInput.value.trim();
+                    task.desc = descInput.value.trim();
+                    // Reaproveita IDs dos itens que já existiam (mesma posição)
+                    task.checklist = checklist.map((newItem, idx) => {
+                        const oldItem = (task.checklist || [])[idx];
+                        return oldItem && oldItem.text === newItem.text ? oldItem : newItem;
+                    });
+                }
+            } else {
+                // MODO CRIAÇÃO
+                const newTask = {
+                    id: Date.now(),
+                    abaId: dadosApp.abaAtiva,
+                    title: titleInput.value.trim(),
+                    desc: descInput.value.trim(),
+                    completed: false,
+                    checklist
+                };
+                dadosApp.tarefas.unshift(newTask);
+            }
 
-            dadosApp.tarefas.unshift(newTask);
             salvarDados();
+            resetForm();
+        }
 
-            titleInput.value = '';
-            if (descInput) descInput.value = '';
+        function startEdit(taskId) {
+            const task = dadosApp.tarefas.find(t => t.id === Number(taskId));
+            if (!task) return;
+
+            editingTaskId = task.id;
+            document.getElementById('task-edit-id').value = task.id;
+            document.getElementById('task-title').value = task.title;
+            document.getElementById('task-desc').value = task.desc || '';
+
+            // Carrega checklist no buffer
+            checklistBuffer = (task.checklist || []).map(i => ({ ...i }));
+            renderChecklistBuilder();
+
+            // Muda o cabeçalho e botão
+            document.getElementById('form-title').innerHTML = `<span class="flex items-center gap-2"><i data-lucide="pencil" class="w-4 h-4 text-indigo-400"></i> Editando Tarefa</span>`;
+            const submitBtn = document.getElementById('task-submit-btn');
+            submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Salvar Alterações';
+            submitBtn.className = 'flex-1 h-9 bg-emerald-600 text-white rounded-md text-sm font-medium hover:bg-emerald-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-emerald-600/25 cursor-pointer';
+            document.getElementById('task-cancel-btn').classList.remove('hidden');
+
+            // Foca no título e rola até o form
+            document.getElementById('task-title').focus();
+            document.getElementById('task-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function cancelEdit() {
+            resetForm();
+        }
+
+        function resetForm() {
+            editingTaskId = null;
+            document.getElementById('task-edit-id').value = '';
+            document.getElementById('task-title').value = '';
+            document.getElementById('task-desc').value = '';
             checklistBuffer = [];
             renderChecklistBuilder();
+
+            document.getElementById('form-title').textContent = 'Nova Tarefa';
+            const submitBtn = document.getElementById('task-submit-btn');
+            submitBtn.innerHTML = '<i data-lucide="plus" class="w-4 h-4"></i> Adicionar Tarefa';
+            submitBtn.className = 'flex-1 h-9 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-500 flex items-center justify-center gap-1 transition-colors shadow-md shadow-indigo-600/25 cursor-pointer';
+            document.getElementById('task-cancel-btn').classList.add('hidden');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         function toggleTask(id) {
@@ -508,10 +554,11 @@
         function deleteTask(id) {
             if (!confirm('Excluir esta tarefa?')) return;
             dadosApp.tarefas = dadosApp.tarefas.filter(t => t.id !== Number(id));
+            // Se estava editando essa tarefa, cancela
+            if (editingTaskId === Number(id)) resetForm();
             salvarDados();
         }
 
-        // Toggle de um item de checklist dentro de uma tarefa existente
         function toggleChecklistItem(taskId, itemId) {
             const task = dadosApp.tarefas.find(t => t.id === Number(taskId));
             if (!task || !task.checklist) return;
@@ -519,16 +566,105 @@
             if (!item) return;
             item.done = !item.done;
 
-            // Auto-completa a tarefa se todos os itens estiverem feitos
             const allDone = task.checklist.length > 0 && task.checklist.every(i => i.done);
             if (allDone) task.completed = true;
-            // Se desmarcar algum, reabre a tarefa
             else if (task.completed && task.checklist.some(i => !i.done)) task.completed = false;
 
             salvarDados();
         }
 
-        // Abrir/fechar detalhes (checklist) de uma tarefa
+        // ====================== REORDENAÇÃO ======================
+        // Retorna os IDs das tarefas visíveis (respeitando filtro), na ordem atual
+        function getVisibleTaskIds() {
+            let data = dadosApp.tarefas.filter(t => t.abaId === dadosApp.abaAtiva);
+            if (filter === 'pending') data = data.filter(t => !t.completed);
+            if (filter === 'completed') data = data.filter(t => t.completed);
+            return data.map(t => t.id);
+        }
+
+        // Move a tarefa para cima/baixo dentro do array global
+        // Funciona com o filtro ativo: troca de posição apenas com a tarefa
+        // adjacente visível (mantendo as outras no lugar)
+        function moveTask(taskId, direction) {
+            const visibleIds = getVisibleTaskIds();
+            const idx = visibleIds.indexOf(taskId);
+            if (idx === -1) return;
+            const targetIdx = idx + direction;
+            if (targetIdx < 0 || targetIdx >= visibleIds.length) return;
+
+            const otherId = visibleIds[targetIdx];
+            const realIdxA = dadosApp.tarefas.findIndex(t => t.id === taskId);
+            const realIdxB = dadosApp.tarefas.findIndex(t => t.id === otherId);
+            if (realIdxA === -1 || realIdxB === -1) return;
+
+            // Troca posições no array principal
+            const temp = dadosApp.tarefas[realIdxA];
+            dadosApp.tarefas[realIdxA] = dadosApp.tarefas[realIdxB];
+            dadosApp.tarefas[realIdxB] = temp;
+
+            salvarDados();
+        }
+
+        // ====================== DRAG AND DROP ======================
+        let draggedTaskId = null;
+
+        function onDragStart(e, taskId) {
+            draggedTaskId = taskId;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', taskId);
+            e.currentTarget.classList.add('opacity-50');
+        }
+
+        function onDragEnd(e) {
+            e.currentTarget.classList.remove('opacity-50');
+            // Remove todas as classes de drop-target
+            document.querySelectorAll('.drop-target-top, .drop-target-bottom').forEach(el => {
+                el.classList.remove('drop-target-top', 'drop-target-bottom');
+            });
+        }
+
+        function onDragOver(e, taskId) {
+            e.preventDefault();
+            if (draggedTaskId === taskId) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const midY = rect.top + rect.height / 2;
+            const isTop = e.clientY < midY;
+            e.currentTarget.classList.toggle('drop-target-top', isTop);
+            e.currentTarget.classList.toggle('drop-target-bottom', !isTop);
+        }
+
+        function onDragLeave(e) {
+            e.currentTarget.classList.remove('drop-target-top', 'drop-target-bottom');
+        }
+
+        function onDrop(e, targetTaskId) {
+            e.preventDefault();
+            const rect = e.currentTarget.getBoundingClientRect();
+            const midY = rect.top + rect.height / 2;
+            const insertBefore = e.clientY < midY;
+
+            e.currentTarget.classList.remove('drop-target-top', 'drop-target-bottom');
+
+            if (draggedTaskId === null || draggedTaskId === targetTaskId) return;
+
+            // Reordena no array global
+            const fromIdx = dadosApp.tarefas.findIndex(t => t.id === Number(draggedTaskId));
+            if (fromIdx === -1) return;
+            const [moved] = dadosApp.tarefas.splice(fromIdx, 1);
+
+            let toIdx = dadosApp.tarefas.findIndex(t => t.id === Number(targetTaskId));
+            if (toIdx === -1) {
+                dadosApp.tarefas.push(moved);
+            } else {
+                if (!insertBefore) toIdx += 1;
+                dadosApp.tarefas.splice(toIdx, 0, moved);
+            }
+
+            draggedTaskId = null;
+            salvarDados();
+        }
+
+        // ====================== FILTRO ======================
         let expandedTasks = new Set();
         function toggleExpand(taskId) {
             if (expandedTasks.has(taskId)) expandedTasks.delete(taskId);
@@ -569,48 +705,85 @@
                 return;
             }
 
-            container.innerHTML = data.map(t => {
+            // Habilita/desabilita setas com base na posição na lista visível
+            const visibleIds = data.map(t => t.id);
+
+            container.innerHTML = data.map((t, idx) => {
                 const checklist = t.checklist || [];
                 const total = checklist.length;
                 const done = checklist.filter(i => i.done).length;
                 const pct = total > 0 ? Math.round((done / total) * 100) : 0;
                 const isExpanded = expandedTasks.has(t.id);
+                const isFirst = idx === 0;
+                const isLast = idx === data.length - 1;
+                const isEditing = editingTaskId === t.id;
 
                 return `
-                <div class="py-3 group">
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex items-start space-x-3 flex-1 min-w-0">
-                            <input type="checkbox" ${t.completed ? 'checked' : ''} onclick="toggleTask(${t.id})" class="mt-1 h-4 w-4 rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 cursor-pointer shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <p class="text-sm font-medium ${t.completed ? 'line-through text-slate-600' : 'text-slate-200'}">${escapeHtml(t.title)}</p>
-                                ${t.desc ? `<p class="text-xs text-slate-500 mt-0.5">${escapeHtml(t.desc)}</p>` : ''}
+                <div class="py-2 group ${isEditing ? 'bg-indigo-950/20 -mx-2 px-2 rounded-md border border-indigo-800/40' : ''}"
+                     ondragover="onDragOver(event, ${t.id})"
+                     ondragleave="onDragLeave(event)"
+                     ondrop="onDrop(event, ${t.id})">
 
-                                ${total > 0 ? `
-                                    <button type="button" onclick="toggleExpand(${t.id})" class="mt-2 flex items-center gap-2 text-[11px] text-slate-400 hover:text-indigo-400 transition cursor-pointer">
-                                        <i data-lucide="${isExpanded ? 'chevron-down' : 'chevron-right'}" class="w-3.5 h-3.5"></i>
-                                        <i data-lucide="list-checks" class="w-3.5 h-3.5"></i>
-                                        <span>${done}/${total} ${done === total ? '· concluído' : '· subtarefas'}</span>
-                                    </button>
-                                    <div class="mt-1.5 h-1 w-full max-w-[180px] bg-slate-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-indigo-500 transition-all duration-300" style="width:${pct}%"></div>
-                                    </div>
-                                ` : ''}
-
-                                ${isExpanded && total > 0 ? `
-                                    <div class="mt-2 pl-1 space-y-1 border-l-2 border-slate-800 ml-1">
-                                        ${checklist.map(item => `
-                                            <label class="flex items-center gap-2 py-0.5 cursor-pointer group/item">
-                                                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem(${t.id}, '${item.id}')" class="h-3.5 w-3.5 rounded border-slate-700 bg-slate-950 text-indigo-500 focus:ring-indigo-500 cursor-pointer shrink-0">
-                                                <span class="text-xs ${item.done ? 'line-through text-slate-600' : 'text-slate-300'} group-hover/item:text-slate-100 transition">${escapeHtml(item.text)}</span>
-                                            </label>
-                                        `).join('')}
-                                    </div>
-                                ` : ''}
-                            </div>
+                    <div class="flex items-start gap-2">
+                        <!-- Drag handle -->
+                        <div draggable="true"
+                             ondragstart="onDragStart(event, ${t.id})"
+                             ondragend="onDragEnd(event)"
+                             class="mt-1 cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 shrink-0 p-0.5"
+                             title="Arrastar para reordenar">
+                            <i data-lucide="grip-vertical" class="w-4 h-4"></i>
                         </div>
-                        <button type="button" onclick="deleteTask(${t.id})" class="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1 cursor-pointer shrink-0">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
+
+                        <!-- Setas -->
+                        <div class="flex flex-col gap-0.5 mt-0.5 shrink-0">
+                            <button type="button" onclick="moveTask(${t.id}, -1)" ${isFirst ? 'disabled' : ''} class="${isFirst ? 'text-slate-700 cursor-not-allowed' : 'text-slate-400 hover:text-indigo-400 cursor-pointer'} p-0.5 transition" title="Mover para cima">
+                                <i data-lucide="chevron-up" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button type="button" onclick="moveTask(${t.id}, 1)" ${isLast ? 'disabled' : ''} class="${isLast ? 'text-slate-700 cursor-not-allowed' : 'text-slate-400 hover:text-indigo-400 cursor-pointer'} p-0.5 transition" title="Mover para baixo">
+                                <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Checkbox principal -->
+                        <input type="checkbox" ${t.completed ? 'checked' : ''} onclick="toggleTask(${t.id})" class="mt-1.5 h-4 w-4 rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 cursor-pointer shrink-0">
+
+                        <!-- Conteúdo -->
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-medium ${t.completed ? 'line-through text-slate-600' : 'text-slate-200'}">${escapeHtml(t.title)}</p>
+                            ${t.desc ? `<p class="text-xs text-slate-500 mt-0.5">${escapeHtml(t.desc)}</p>` : ''}
+
+                            ${total > 0 ? `
+                                <button type="button" onclick="toggleExpand(${t.id})" class="mt-2 flex items-center gap-2 text-[11px] text-slate-400 hover:text-indigo-400 transition cursor-pointer">
+                                    <i data-lucide="${isExpanded ? 'chevron-down' : 'chevron-right'}" class="w-3.5 h-3.5"></i>
+                                    <i data-lucide="list-checks" class="w-3.5 h-3.5"></i>
+                                    <span>${done}/${total} ${done === total ? '· concluído' : '· subtarefas'}</span>
+                                </button>
+                                <div class="mt-1.5 h-1 w-full max-w-[180px] bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-indigo-500 transition-all duration-300" style="width:${pct}%"></div>
+                                </div>
+                            ` : ''}
+
+                            ${isExpanded && total > 0 ? `
+                                <div class="mt-2 pl-1 space-y-1 border-l-2 border-slate-800 ml-1">
+                                    ${checklist.map(item => `
+                                        <label class="flex items-center gap-2 py-0.5 cursor-pointer group/item">
+                                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem(${t.id}, '${item.id}')" class="h-3.5 w-3.5 rounded border-slate-700 bg-slate-950 text-indigo-500 focus:ring-indigo-500 cursor-pointer shrink-0">
+                                            <span class="text-xs ${item.done ? 'line-through text-slate-600' : 'text-slate-300'} group-hover/item:text-slate-100 transition">${escapeHtml(item.text)}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Ações -->
+                        <div class="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button type="button" onclick="startEdit(${t.id})" class="text-slate-500 hover:text-indigo-400 p-1 cursor-pointer" title="Editar tarefa">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button type="button" onclick="deleteTask(${t.id})" class="text-slate-500 hover:text-red-400 p-1 cursor-pointer" title="Excluir tarefa">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 `;
@@ -630,5 +803,15 @@
             checkInitialSession();
         });
     </script>
+
+    <style>
+        /* Indicadores visuais do drag & drop */
+        .drop-target-top {
+            box-shadow: inset 0 2px 0 0 #6366f1;
+        }
+        .drop-target-bottom {
+            box-shadow: inset 0 -2px 0 0 #6366f1;
+        }
+    </style>
 </body>
 </html>
