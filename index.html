@@ -6,69 +6,23 @@
     <title>TaskMaster - Dark Edition</title>
     
     <!-- Configurações PWA -->
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#09090b">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaskMaster">
     <meta name="application-name" content="TaskMaster">
-    <meta name="msapplication-TileColor" content="#4f46e5">
-    <meta name="msapplication-TileImage" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-    <!-- Apple Touch Icon (iOS) - Múltiplos tamanhos para melhor compatibilidade -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" sizes="120x120" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <!-- Ícone SVG Customizado (check em quadrado indigo) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%234f46e5'/><path d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='52' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%234f46e5'/><path d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='52' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
-    <!-- Favicon para navegador -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Cpath d='M160 260l70 70 130-140' fill='none' stroke='%23ffffff' stroke-width='50' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-
-    <!-- Web App Manifest (inline) - Essencial para Android -->
-    <link rel="manifest" href='data:application/manifest+json,{
-        "name": "TaskMaster Gerenciador",
-        "short_name": "TaskMaster",
-        "description": "Gerenciador de Tarefas Dark Mode",
-        "start_url": "./",
-        "scope": "./",
-        "display": "standalone",
-        "orientation": "portrait",
-        "background_color": "#09090b",
-        "theme_color": "#4f46e5",
-        "lang": "pt-BR",
-        "dir": "ltr",
-        "categories": ["productivity", "utilities"],
-        "icons": [
-            {
-                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'%3E%3Crect width=\'512\' height=\'512\' rx=\'110\' fill=\'%234f46e5\'/%3E%3Cpath d=\'M160 260l70 70 130-140\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'50\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E",
-                "sizes": "512x512",
-                "type": "image/svg+xml",
-                "purpose": "any"
-            },
-            {
-                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'%3E%3Crect width=\'512\' height=\'512\' rx=\'110\' fill=\'%234f46e5\'/%3E%3Cpath d=\'M160 260l70 70 130-140\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'50\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E",
-                "sizes": "512x512",
-                "type": "image/svg+xml",
-                "purpose": "maskable"
-            },
-            {
-                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'%3E%3Crect width=\'512\' height=\'512\' rx=\'110\' fill=\'%234f46e5\'/%3E%3Cpath d=\'M160 260l70 70 130-140\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'50\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E",
-                "sizes": "192x192",
-                "type": "image/svg+xml",
-                "purpose": "any"
-            },
-            {
-                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'%3E%3Crect width=\'512\' height=\'512\' rx=\'110\' fill=\'%234f46e5\'/%3E%3Cpath d=\'M160 260l70 70 130-140\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'50\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E",
-                "sizes": "192x192",
-                "type": "image/svg+xml",
-                "purpose": "maskable"
-            }
-        ]
-    }'>
+    <!-- Manifest URL-encoded -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22TaskMaster%22%2C%22short_name%22%3A%22TaskMaster%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527120%2527%2520fill%253D%2527%25234f46e5%2527%2F%253E%253Cpath%2520d%253D%2527M160%2520260l70%252070%2520130-140%2527%2520fill%253D%2527none%2527%2520stroke%253D%2527%2523ffffff%2527%2520stroke-width%253D%252752%2527%2520stroke-linecap%253D%2527round%2527%2520stroke-linejoin%253D%2527round%2527%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%2520maskable%22%7D%5D%7D">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Rubik & Inter -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rubik:wght@500;600;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -88,7 +42,7 @@
 </head>
 <body class="bg-slate-950 font-inter text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
-    <!-- LOGIN PAGE (DARK) -->
+    <!-- LOGIN PAGE -->
     <div id="login-page" class="flex-1 flex items-center justify-center p-4">
         <div class="w-full max-w-md bg-slate-900 rounded-xl border border-slate-800 shadow-xl p-8 space-y-6">
             <div class="text-center space-y-2">
@@ -118,7 +72,7 @@
         </div>
     </div>
 
-    <!-- HOME / DASHBOARD PAGE (DARK) -->
+    <!-- HOME / DASHBOARD -->
     <div id="home-page" class="hidden flex-1 flex flex-col">
         <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-30">
             <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -126,7 +80,10 @@
                     <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
                         <i data-lucide="check-square" class="w-5 h-5"></i>
                     </div>
-                    <span style="font-family: 'Rubik', sans-serif; font-size: 22px; font-weight: 500;" class="text-white">TaskMaster</span>
+                    <div>
+                        <span style="font-family: 'Rubik', sans-serif; font-size: 22px; font-weight: 500;" class="text-white block leading-none">TaskMaster</span>
+                        <p id="sync-status" class="text-[10px] text-amber-400 font-medium leading-none mt-0.5">● A ligar ao Supabase...</p>
+                    </div>
                 </div>
                 <div class="flex items-center space-x-3">
                     <span id="user-email-display" class="text-sm text-slate-400 hidden sm:inline"></span>
@@ -137,12 +94,21 @@
             </div>
         </header>
 
+        <!-- Navegação por Abas -->
+        <nav class="bg-slate-950 border-b border-slate-800 px-4 pt-3 flex justify-between items-center overflow-x-auto">
+            <div id="container-abas" class="flex space-x-2 pb-2"></div>
+            <button onclick="abrirModalAba()" class="text-slate-400 hover:text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-md text-xs sm:text-sm transition flex items-center gap-1 whitespace-nowrap mb-2 ml-2 cursor-pointer">
+                <i data-lucide="folder-plus" class="w-4 h-4"></i>
+                <span>Nova Aba</span>
+            </button>
+        </nav>
+
         <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full space-y-6">
             <!-- Banner -->
             <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 style="font-family: 'Rubik', sans-serif; font-size: 38px; font-weight: 500;" class="text-white tracking-tight leading-none mb-1">Painel</h2>
-                    <p class="text-sm text-slate-400">Modo Dark Ativo • Ícone PWA configurado para identificação na tela inicial.</p>
+                    <p class="text-sm text-slate-400">Modo Dark Ativo • Ícone PWA configurado • Sincronização Supabase</p>
                 </div>
                 <div class="flex gap-2 flex-wrap">
                     <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">TypeScript</span>
@@ -186,21 +152,156 @@
         </main>
     </div>
 
-    <!-- Script de Execução Online -->
+    <!-- Modal: Nova Aba -->
+    <div id="modal-aba" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-sm w-full p-5 sm:p-6 shadow-2xl">
+            <h3 class="text-base font-semibold mb-4 text-white flex items-center gap-2">
+                <i data-lucide="folder-plus" class="w-5 h-5 text-indigo-400"></i>
+                <span>Nova Aba</span>
+            </h3>
+            <form id="form-aba" onsubmit="salvarAba(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Nome da Aba</label>
+                    <input type="text" id="aba-nome" required class="w-full bg-slate-950 border border-slate-700 rounded-md p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-slate-600" placeholder="Ex: Trabalho, Pessoal...">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="fecharModalAba()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-md text-sm transition cursor-pointer">Cancelar</button>
+                    <button type="submit" class="bg-white hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-md text-sm transition font-medium shadow-sm cursor-pointer">Criar Aba</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            checkInitialSession();
-        });
+        // ====================== SUPABASE ======================
+        const SUPABASE_URL = 'https://gjuyamxzcjxyulsfplja.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_vXqWeag_-OIBATj13s-T5w_YuLU3b3U';
+        const TABLE_NAME = 'taskmaster_data';
+        const RECORD_ID = 'taskmaster_board';
+
+        // ====================== ESTADO ======================
+        let dadosApp = {
+            abas: [
+                { id: 'geral', nome: 'Geral' }
+            ],
+            abaAtiva: 'geral',
+            tarefas: [
+                { id: 1, abaId: 'geral', title: 'Configurar Servidor Node.js', desc: 'Estruturar Express e rotas iniciais', completed: true },
+                { id: 2, abaId: 'geral', title: 'Conectar com Supabase', desc: 'Validar chaves de API e tabelas PostgreSQL', completed: false }
+            ]
+        };
 
         let filter = 'all';
-        let tasks = JSON.parse(localStorage.getItem('gh_tasks_dark_v2')) || [
-            { id: 1, title: 'Configurar Servidor Node.js', desc: 'Estruturar Express e rotas iniciais', completed: true },
-            { id: 2, title: 'Conectar com Supabase', desc: 'Validar chaves de API e tabelas PostgreSQL', completed: false }
-        ];
 
+        // ====================== HEADERS PADRÃO ======================
+        function getHeaders(extra = {}) {
+            return {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                ...extra
+            };
+        }
+
+        // ====================== SUPABASE: LOAD / SAVE ======================
+        async function carregarDadosDoSupabase() {
+            const statusEl = document.getElementById('sync-status');
+            try {
+                const url = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?id=eq.${RECORD_ID}&select=content`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: getHeaders()
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errText}`);
+                }
+                const result = await response.json();
+
+                if (result && result.length > 0 && result[0].content) {
+                    const cloud = result[0].content;
+                    // Migração automática de formato antigo
+                    if (cloud.tarefas && !cloud.abas) {
+                        dadosApp.abas = [{ id: 'geral', nome: 'Geral' }];
+                        dadosApp.abaAtiva = 'geral';
+                        dadosApp.tarefas = cloud.tarefas.map(t => ({ ...t, abaId: 'geral' }));
+                    } else if (cloud.abas && cloud.tarefas) {
+                        dadosApp = cloud;
+                    }
+                    statusEl.textContent = '● Sincronizado na nuvem';
+                    statusEl.className = 'text-[10px] text-emerald-400 font-medium leading-none mt-0.5';
+                } else {
+                    // Nada na nuvem ainda → cria o registro inicial
+                    await salvarDadosNoSupabase();
+                    statusEl.textContent = '● Sincronizado na nuvem';
+                    statusEl.className = 'text-[10px] text-emerald-400 font-medium leading-none mt-0.5';
+                }
+            } catch (err) {
+                console.error('Erro ao carregar:', err);
+                statusEl.textContent = '● Offline (usando local)';
+                statusEl.className = 'text-[10px] text-rose-400 font-medium leading-none mt-0.5';
+                // Fallback: localStorage
+                const local = localStorage.getItem('gh_tasks_dark_v3');
+                if (local) {
+                    try { dadosApp = JSON.parse(local); } catch(e) {}
+                }
+            }
+            render();
+        }
+
+        async function salvarDados() {
+            render();
+            // Backup local sempre
+            localStorage.setItem('gh_tasks_dark_v3', JSON.stringify(dadosApp));
+
+            const statusEl = document.getElementById('sync-status');
+            statusEl.textContent = '● A guardar...';
+            statusEl.className = 'text-[10px] text-amber-400 font-medium leading-none mt-0.5';
+
+            try {
+                const url = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: getHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+                    body: JSON.stringify({
+                        id: RECORD_ID,
+                        content: dadosApp,
+                        updated_at: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errText}`);
+                }
+                statusEl.textContent = '● Sincronizado na nuvem';
+                statusEl.className = 'text-[10px] text-emerald-400 font-medium leading-none mt-0.5';
+            } catch (err) {
+                console.error('Erro ao guardar:', err);
+                statusEl.textContent = '● Erro ao guardar';
+                statusEl.className = 'text-[10px] text-rose-400 font-medium leading-none mt-0.5';
+            }
+        }
+
+        async function salvarDadosNoSupabase() {
+            const url = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: getHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+                body: JSON.stringify({
+                    id: RECORD_ID,
+                    content: dadosApp,
+                    updated_at: new Date().toISOString()
+                })
+            });
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errText}`);
+            }
+        }
+
+        // ====================== AUTENTICAÇÃO ======================
         function fillDemo() {
             document.getElementById('login-email').value = 'dev@taskmaster.com';
             document.getElementById('login-password').value = '123456';
@@ -230,7 +331,8 @@
             const emailDisplay = document.getElementById('user-email-display');
             if (emailDisplay) emailDisplay.innerText = email;
             
-            render();
+            // Carrega dados do Supabase assim que entra
+            carregarDadosDoSupabase();
         }
 
         function handleLogout() {
@@ -238,6 +340,54 @@
             window.location.reload();
         }
 
+        // ====================== ABAS ======================
+        function renderizarAbas() {
+            const container = document.getElementById('container-abas');
+            if (!container) return;
+            container.innerHTML = '';
+            dadosApp.abas.forEach(aba => {
+                const ativa = aba.id === dadosApp.abaAtiva;
+                const btn = document.createElement('button');
+                btn.className = `px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-t-lg transition flex items-center gap-2 border-b-2 whitespace-nowrap cursor-pointer ${ativa ? 'bg-slate-900 text-white border-indigo-500 shadow' : 'text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-900/50'}`;
+                btn.innerHTML = `<span>${escapeHtml(aba.nome)}</span>${dadosApp.abas.length > 1 ? `<i data-lucide="x" class="w-3 h-3 hover:text-red-400" onclick="event.stopPropagation(); deletarAba('${aba.id}')"></i>` : ''}`;
+                btn.onclick = () => { dadosApp.abaAtiva = aba.id; salvarDados(); };
+                container.appendChild(btn);
+            });
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function abrirModalAba() {
+            document.getElementById('modal-aba').classList.remove('hidden');
+            document.getElementById('modal-aba').classList.add('flex');
+        }
+        function fecharModalAba() {
+            document.getElementById('modal-aba').classList.remove('flex');
+            document.getElementById('modal-aba').classList.add('hidden');
+            document.getElementById('form-aba').reset();
+        }
+
+        function salvarAba(e) {
+            e.preventDefault();
+            const nome = document.getElementById('aba-nome').value.trim();
+            if (!nome) return;
+            const novaId = 'aba_' + Date.now();
+            dadosApp.abas.push({ id: novaId, nome });
+            dadosApp.abaAtiva = novaId;
+            salvarDados();
+            fecharModalAba();
+        }
+
+        function deletarAba(id) {
+            if (dadosApp.abas.length <= 1) return alert('Tem de ter pelo menos uma aba.');
+            if (confirm('Deseja excluir esta aba e todas as suas tarefas?')) {
+                dadosApp.tarefas = dadosApp.tarefas.filter(t => t.abaId !== id);
+                dadosApp.abas = dadosApp.abas.filter(a => a.id !== id);
+                dadosApp.abaAtiva = dadosApp.abas[0].id;
+                salvarDados();
+            }
+        }
+
+        // ====================== TAREFAS ======================
         function handleAddTask(e) {
             e.preventDefault();
             const titleInput = document.getElementById('task-title');
@@ -247,26 +397,27 @@
 
             const newTask = {
                 id: Date.now(),
+                abaId: dadosApp.abaAtiva,
                 title: titleInput.value.trim(),
                 desc: descInput ? descInput.value.trim() : '',
                 completed: false
             };
 
-            tasks.unshift(newTask);
-            sync();
+            dadosApp.tarefas.unshift(newTask);
+            salvarDados();
 
             titleInput.value = '';
             if (descInput) descInput.value = '';
         }
 
         function toggleTask(id) {
-            tasks = tasks.map(t => t.id === Number(id) ? { ...t, completed: !t.completed } : t);
-            sync();
+            dadosApp.tarefas = dadosApp.tarefas.map(t => t.id === Number(id) ? { ...t, completed: !t.completed } : t);
+            salvarDados();
         }
 
         function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== Number(id));
-            sync();
+            dadosApp.tarefas = dadosApp.tarefas.filter(t => t.id !== Number(id));
+            salvarDados();
         }
 
         function setFilter(f) {
@@ -282,21 +433,23 @@
             render();
         }
 
-        function sync() {
-            localStorage.setItem('gh_tasks_dark_v2', JSON.stringify(tasks));
-            render();
+        // ====================== RENDER ======================
+        function render() {
+            renderizarAbas();
+            renderTasks();
         }
 
-        function render() {
+        function renderTasks() {
             const container = document.getElementById('tasks-list');
             if (!container) return;
 
-            let data = tasks;
-            if (filter === 'pending') data = tasks.filter(t => !t.completed);
-            if (filter === 'completed') data = tasks.filter(t => t.completed);
+            // Filtra pela aba ativa
+            let data = dadosApp.tarefas.filter(t => t.abaId === dadosApp.abaAtiva);
+            if (filter === 'pending') data = data.filter(t => !t.completed);
+            if (filter === 'completed') data = data.filter(t => t.completed);
 
             if (data.length === 0) {
-                container.innerHTML = `<div class="py-8 text-center text-sm text-slate-500">Nenhuma tarefa encontrada.</div>`;
+                container.innerHTML = `<div class="py-8 text-center text-sm text-slate-500">Nenhuma tarefa encontrada nesta aba.</div>`;
                 if (typeof lucide !== 'undefined') lucide.createIcons();
                 return;
             }
@@ -324,6 +477,14 @@
         function escapeHtml(str) {
             return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
+
+        // ====================== INIT ======================
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            checkInitialSession();
+        });
     </script>
 </body>
 </html>
